@@ -36,7 +36,12 @@
         "useBlockStatements": "off",
         "useConsistentArrayType": "error",
         "useConsistentCurlyBraces": "error",
-        "useConsistentTypeDefinitions": "error",
+        "useConsistentTypeDefinitions": {
+          "options": {
+            "style": "type"
+          },
+          "level": "error"
+        },
         "useForOf": "error",
         "useFragmentSyntax": "error",
         "useSelfClosingElements": "error",

@@ -1,5 +1,12 @@
 @import 'reset.css';
 @import 'fonts.css';
 
+* {
+  image-rendering: pixelated;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+}
+
 /* biome-ignore lint/suspicious/noUnknownAtRules: https://stylexjs.com/docs/learn/installation/ */
 @stylex;

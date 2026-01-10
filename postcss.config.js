@@ -11,7 +11,6 @@ export const plugins = {
       },
       plugins: babelConfigPlugins,
     },
-    useCSSLayers: true,
   },
   autoprefixer: {},
 };

@@ -10,6 +10,10 @@ export const plugins = [
     {
       dev: process.env.NODE_ENV !== 'production',
       treeshakeCompensation: true,
+      unstable_moduleResolution: {
+        type: 'commonJS',
+        rootDir: dirname,
+      },
       aliases: {
         '@/*': [path.join(import.meta.dirname, 'src', '*')],
       },

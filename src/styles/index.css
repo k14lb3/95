@@ -2,6 +2,7 @@
 @import 'fonts.css';
 
 * {
+  box-sizing: border-box;
   image-rendering: pixelated;
   user-select: none;
   -webkit-user-drag: none;

@@ -1,5 +1,12 @@
+'use client';
+
+import { Dos, Screen } from '@components';
 import type { JSX } from 'react';
 
 export default (): JSX.Element => {
-  return <></>;
+  return (
+    <Screen>
+      <Dos />
+    </Screen>
+  );
 };

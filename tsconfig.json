@@ -23,11 +23,12 @@
       "@components": ["./src/components/index.ts"],
       "@hooks": ["./src/hooks/index.ts"],
       "@lib": ["./src/lib/index.ts"],
+      "@types": ["./src/types/index.ts"],
       "@stylex/color.stylex.ts": ["./src/stylex/consts/color.stylex.ts"],
       "@stylex/px.stylex.ts": ["./src/stylex/consts/px.stylex.ts"],
       "@stylex/font.stylex.ts": ["./src/stylex/consts/font.stylex.ts"],
       "@stylex/animation.stylex.ts": [
-        "src/stylex/consts/animation.stylex.ts"
+        "./src/stylex/consts/animation.stylex.ts"
       ]
     }
   },

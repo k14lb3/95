@@ -1,6 +1,6 @@
 'use client';
 
-import { Dos, Screen, Splash } from '@components';
+import { Desktop, Dos, Screen, Splash } from '@components';
 import { getRandomNumber } from '@lib';
 import type { BootStage } from '@types';
 import { type JSX, useEffect, useState } from 'react';
@@ -44,7 +44,7 @@ export default (): JSX.Element => {
                       () => {
                         setBootStage('booted');
                       },
-                      getRandomNumber({ min: 500, max: 1000 }),
+                      getRandomNumber({ min: 1000, max: 2000 }),
                     );
                   }, 7000);
                 },
@@ -109,7 +109,7 @@ export default (): JSX.Element => {
           case 'initializing':
             return;
           case 'booted':
-            return;
+            return <Desktop />;
         }
       })()}
     </Screen>

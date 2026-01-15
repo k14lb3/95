@@ -1,7 +1,7 @@
 'use client';
 
 import { Desktop, Dos, Screen, Splash } from '@components';
-import { getRandomNumber } from '@lib';
+import { getRandomNumber, sleep } from '@lib';
 import type { BootStage } from '@types';
 import { type JSX, useEffect, useState } from 'react';
 
@@ -18,44 +18,27 @@ export default (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    const handler = () => {
+    const handler = async () => {
       if (bootStage !== 'dos-prompt') {
         return;
       }
 
       setBootStage('dos-loading');
+      await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
 
-      setTimeout(
-        () => {
-          setBootStage('dos-starting');
+      setBootStage('dos-starting');
+      await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
 
-          setTimeout(
-            () => {
-              setBootStage('dos-loading');
+      setBootStage('dos-loading');
+      await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
 
-              setTimeout(
-                () => {
-                  setBootStage('splash');
+      setBootStage('splash');
+      await sleep({ ms: 7000 });
 
-                  setTimeout(() => {
-                    setBootStage('initializing');
+      setBootStage('initializing');
+      await sleep({ ms: getRandomNumber({ min: 1000, max: 2000 }) });
 
-                    setTimeout(
-                      () => {
-                        setBootStage('booted');
-                      },
-                      getRandomNumber({ min: 1000, max: 2000 }),
-                    );
-                  }, 7000);
-                },
-                getRandomNumber({ min: 500, max: 1000 }),
-              );
-            },
-            getRandomNumber({ min: 500, max: 1000 }),
-          );
-        },
-        getRandomNumber({ min: 500, max: 2000 }),
-      );
+      setBootStage('booted');
     };
 
     window.addEventListener('keydown', handler);

@@ -2,19 +2,16 @@
   font-family: 'IBM VGA 8x16';
   font-weight: normal;
   src: url('/fonts/ibm_vga_8x16.woff2') format('woff2');
-  -webkit-font-smoothing: none;
 }
 
 @font-face {
   font-family: 'Microsoft Sans Serif';
   font-weight: normal;
   src: url('/fonts/mss.woff2') format('woff2');
-  -webkit-font-smoothing: none;
 }
 
 @font-face {
   font-family: 'Microsoft Sans Serif';
   font-weight: bold;
   src: url('/fonts/mss-bold.woff2') format('woff2');
-  -webkit-font-smoothing: none;
 }

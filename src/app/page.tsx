@@ -30,7 +30,7 @@ export default (): JSX.Element => {
       await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
 
       setBootStage('dos-loading');
-      await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
+      await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
 
       setBootStage('splash');
       await sleep({ ms: 7000 });

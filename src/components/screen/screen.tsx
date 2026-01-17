@@ -8,7 +8,7 @@ const styles = stylex.create({
     height: 'inherit',
   },
   screenAspectRatio: {
-    width: 'unset',
+    width: null,
     aspectRatio: '4/3',
   },
 });

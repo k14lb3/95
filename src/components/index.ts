@@ -3,3 +3,4 @@ export * from './dos';
 export * from './nest';
 export * from './screen';
 export * from './splash';
+export * from './taskbar';

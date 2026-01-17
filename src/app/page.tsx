@@ -9,12 +9,16 @@ export default (): JSX.Element => {
   const [bootStage, setBootStage] = useState<BootStage>('dos-loading');
 
   useEffect(() => {
-    setTimeout(
+    const timeoutId = setTimeout(
       () => {
         setBootStage('dos-prompt');
       },
       getRandomNumber({ min: 0, max: 500 }),
     );
+
+    return () => {
+      clearTimeout(timeoutId);
+    };
   }, []);
 
   useEffect(() => {

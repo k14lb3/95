@@ -18,7 +18,7 @@ type Props = PropsWithChildren;
 export const Screen = ({ children }: Props): JSX.Element => {
   const { width, height } = useWindowSize();
   const [shouldSetScreenAspectRatio, setShouldSetScreenAspectRatio] =
-    useState(false);
+    useState<boolean>(false);
 
   useEffect(() => {
     if (!width || !height) {

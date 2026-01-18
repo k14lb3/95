@@ -1,7 +1,7 @@
 'use client';
 
 import { Desktop, Dos, Screen, Splash } from '@components';
-import { getRandomNumber, sleep } from '@lib';
+import { getRandomNumber, sessionStorage, sleep } from '@lib';
 import type { BootStage } from '@types';
 import { type JSX, useEffect, useState } from 'react';
 
@@ -15,6 +15,13 @@ export default (): JSX.Element => {
       },
       getRandomNumber({ min: 0, max: 500 }),
     );
+
+    const isBooted = sessionStorage.get({ key: 'is-booted' });
+
+    if (isBooted) {
+      setBootStage('booted');
+      clearTimeout(timeoutId);
+    }
 
     return () => {
       clearTimeout(timeoutId);
@@ -43,6 +50,7 @@ export default (): JSX.Element => {
       await sleep({ ms: getRandomNumber({ min: 1000, max: 2000 }) });
 
       setBootStage('booted');
+      sessionStorage.set({ key: 'is-booted', value: true });
     };
 
     window.addEventListener('keydown', handler);

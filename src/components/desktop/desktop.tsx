@@ -1,5 +1,5 @@
 import { Taskbar } from '@components';
-import { getRandomNumber } from '@lib';
+import { getRandomNumber, sessionStorage } from '@lib';
 import { color } from '@stylex/color.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import { type JSX, useEffect, useState } from 'react';
@@ -27,6 +27,13 @@ export const Desktop = (): JSX.Element => {
       },
       getRandomNumber({ min: 500, max: 1500 }),
     );
+
+    const isBooted = sessionStorage.get({ key: 'is-booted' });
+
+    if (isBooted) {
+      setShouldShowUI(true);
+      clearTimeout(timeoutId);
+    }
 
     return () => {
       clearTimeout(timeoutId);

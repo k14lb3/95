@@ -50,7 +50,6 @@ export default (): JSX.Element => {
       await sleep({ ms: getRandomNumber({ min: 1000, max: 2000 }) });
 
       setBootStage('booted');
-      sessionStorage.set({ key: 'is-booted', value: true });
     };
 
     const touchStartEventListenerOptions: AddEventListenerOptions = {
@@ -118,7 +117,13 @@ export default (): JSX.Element => {
           case 'initializing':
             return;
           case 'booted':
-            return <Desktop />;
+            return (
+              <Desktop
+                onShowUI={() => {
+                  sessionStorage.set({ key: 'is-booted', value: true });
+                }}
+              />
+            );
         }
       })()}
     </Screen>

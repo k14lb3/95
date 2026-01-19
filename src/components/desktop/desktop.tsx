@@ -17,7 +17,11 @@ const styles = stylex.create({
   },
 });
 
-export const Desktop = (): JSX.Element => {
+type Props = {
+  onShowUI: () => void;
+};
+
+export const Desktop = ({ onShowUI }: Props): JSX.Element => {
   const [shouldShowUI, setShouldShowUI] = useState<boolean>(false);
 
   useEffect(() => {
@@ -39,6 +43,14 @@ export const Desktop = (): JSX.Element => {
       clearTimeout(timeoutId);
     };
   }, []);
+
+  useEffect(() => {
+    if (!shouldShowUI) {
+      return;
+    }
+
+    onShowUI();
+  }, [shouldShowUI, onShowUI]);
 
   return (
     <div {...stylex.props(styles.desktop)}>

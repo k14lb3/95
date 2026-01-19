@@ -15,7 +15,7 @@ const styles = stylex.create({
     borderTopColor: color.alto,
   },
   taskbarInner1: {
-    height: 'inherit',
+    height: '100%',
     borderTopWidth: px[1],
     borderTopStyle: 'solid',
     borderTopColor: color.white,

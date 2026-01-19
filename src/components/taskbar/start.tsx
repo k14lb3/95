@@ -24,7 +24,7 @@ const styles = stylex.create({
     borderLeftColor: color.alto,
   },
   startInner2: {
-    height: '100%',
+    height: 'inherit',
     display: 'flex',
     alignItems: 'center',
     padding: px[2],

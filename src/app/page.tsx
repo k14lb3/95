@@ -53,10 +53,24 @@ export default (): JSX.Element => {
       sessionStorage.set({ key: 'is-booted', value: true });
     };
 
+    const touchStartEventListenerOptions: AddEventListenerOptions = {
+      passive: true,
+    };
+
     window.addEventListener('keydown', handler);
+    window.addEventListener(
+      'touchstart',
+      handler,
+      touchStartEventListenerOptions,
+    );
 
     return () => {
       window.removeEventListener('keydown', handler);
+      window.removeEventListener(
+        'touchstart',
+        handler,
+        touchStartEventListenerOptions,
+      );
     };
   }, [bootStage]);
 

@@ -16,21 +16,21 @@ const styles = stylex.create({
 type Props = PropsWithChildren;
 
 export const Screen = ({ children }: Props): JSX.Element => {
-  const { width, height } = useWindowSize();
+  const windowSize = useWindowSize();
   const [shouldSetScreenAspectRatio, setShouldSetScreenAspectRatio] =
     useState<boolean>(false);
 
   useEffect(() => {
-    if (!width || !height) {
+    if (!windowSize.width || !windowSize.height) {
       return;
     }
 
-    if (width / height >= 1.333) {
+    if (windowSize.width / windowSize.height >= 1.333) {
       setShouldSetScreenAspectRatio(true);
     } else {
       setShouldSetScreenAspectRatio(false);
     }
-  }, [width, height]);
+  }, [windowSize.width, windowSize.height]);
 
   return (
     <div

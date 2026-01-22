@@ -3,20 +3,20 @@ import Image from 'next/image';
 import { type JSX, useEffect, useState } from 'react';
 
 export const Splash = (): JSX.Element => {
-  const { width, height } = useWindowSize();
+  const windowSize = useWindowSize();
   const [objectFit, setObjectFit] = useState<'cover' | 'contain'>('cover');
 
   useEffect(() => {
-    if (!width || !height) {
+    if (!windowSize.width || !windowSize.height) {
       return;
     }
 
-    if (width / height >= 1.333) {
+    if (windowSize.width / windowSize.height >= 1.333) {
       setObjectFit('contain');
     } else {
       setObjectFit('cover');
     }
-  }, [width, height]);
+  }, [windowSize.width, windowSize.height]);
 
   return (
     <Image

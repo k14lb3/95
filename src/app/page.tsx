@@ -1,7 +1,7 @@
 'use client';
 
 import { Desktop, Dos, Screen, Splash } from '@components';
-import { getRandomNumber, sessionStorage, sleep } from '@lib';
+import { getRandomNumber, sessionStorageRepo, sleep } from '@lib';
 import type { BootStage } from '@types';
 import { type JSX, useEffect, useState } from 'react';
 
@@ -16,7 +16,7 @@ export default (): JSX.Element => {
       getRandomNumber({ min: 0, max: 500 }),
     );
 
-    const isBooted = sessionStorage.get({ key: 'is-booted' });
+    const isBooted = sessionStorageRepo.isBooted.get();
 
     if (isBooted) {
       setBootStage('booted');
@@ -120,7 +120,7 @@ export default (): JSX.Element => {
             return (
               <Desktop
                 onShowUI={() => {
-                  sessionStorage.set({ key: 'is-booted', value: true });
+                  sessionStorageRepo.isBooted.set(true);
                 }}
               />
             );

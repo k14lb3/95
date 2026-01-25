@@ -2,10 +2,33 @@
 
 import { Desktop, Dos, Screen, Splash } from '@components';
 import { getRandomNumber, sessionStorageRepo, sleep } from '@lib';
+import { cursor } from '@stylex/cursor.stylex.ts';
+import * as stylex from '@stylexjs/stylex';
 import type { BootStage } from '@types';
 import { type JSX, useEffect, useState } from 'react';
 
+const styles = stylex.create({
+  cursorNone: {
+    cursor: cursor.none,
+  },
+  cursorDefault: {
+    cursor: cursor.default,
+  },
+  cursorProgress: {
+    cursor: cursor.progress,
+  },
+  cursorWait: {
+    cursor: cursor.wait,
+  },
+});
+
 export default (): JSX.Element => {
+  const [cursorStyle, setCursorStyle] = useState<
+    | typeof styles.cursorNone
+    | typeof styles.cursorDefault
+    | typeof styles.cursorProgress
+    | typeof styles.cursorWait
+  >(styles.cursorNone);
   const [bootStage, setBootStage] = useState<BootStage>('dos-loading');
 
   useEffect(() => {
@@ -20,6 +43,7 @@ export default (): JSX.Element => {
 
     if (isBooted) {
       setBootStage('booted');
+      setCursorStyle(styles.cursorDefault);
       clearTimeout(timeoutId);
     }
 
@@ -47,9 +71,21 @@ export default (): JSX.Element => {
       await sleep({ ms: 7000 });
 
       setBootStage('initializing');
-      await sleep({ ms: getRandomNumber({ min: 1000, max: 2000 }) });
+      setCursorStyle(styles.cursorDefault);
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
 
+      setCursorStyle(styles.cursorProgress);
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      setCursorStyle(styles.cursorDefault);
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      setCursorStyle(styles.cursorWait);
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      setCursorStyle(styles.cursorDefault);
       setBootStage('booted');
+      setCursorStyle(styles.cursorWait);
     };
 
     const touchStartEventListenerOptions: AddEventListenerOptions = {
@@ -74,7 +110,7 @@ export default (): JSX.Element => {
   }, [bootStage]);
 
   return (
-    <Screen>
+    <Screen style={cursorStyle}>
       {(() => {
         switch (bootStage) {
           case 'dos-loading':
@@ -121,6 +157,7 @@ export default (): JSX.Element => {
               <Desktop
                 onShowUI={() => {
                   sessionStorageRepo.isBooted.set(true);
+                  setCursorStyle(styles.cursorDefault);
                 }}
               />
             );

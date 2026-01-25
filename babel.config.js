@@ -26,6 +26,9 @@ export const plugins = [
         '@stylex/font.stylex.ts': [
           path.join(dirname, 'src/stylex/consts/font.stylex.ts'),
         ],
+        '@stylex/cursor.stylex.ts': [
+          path.join(dirname, 'src/stylex/consts/cursor.stylex.ts'),
+        ],
         '@stylex/animation.stylex.ts': [
           path.join(dirname, 'src/stylex/consts/animation.stylex.ts'),
         ],

@@ -1,6 +1,7 @@
 import '@styles';
 
 import { color } from '@stylex/color.stylex.ts';
+import { cursor } from '@stylex/cursor.stylex.ts';
 import { font } from '@stylex/font.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { JSX, PropsWithChildren } from 'react';
@@ -12,6 +13,7 @@ const styles = stylex.create({
     height: '100%',
     fontFamily: font['Microsoft Sans Serif'],
     backgroundColor: color.black,
+    cursor: cursor.none,
   },
   body: {
     height: 'inherit',

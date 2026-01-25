@@ -13,9 +13,11 @@ const styles = stylex.create({
   },
 });
 
-type Props = PropsWithChildren;
+type Props = PropsWithChildren<{
+  style?: stylex.StyleXStyles;
+}>;
 
-export const Screen = ({ children }: Props): JSX.Element => {
+export const Screen = ({ style, children }: Props): JSX.Element => {
   const windowSize = useWindowSize();
   const [shouldSetScreenAspectRatio, setShouldSetScreenAspectRatio] =
     useState<boolean>(false);
@@ -37,6 +39,7 @@ export const Screen = ({ children }: Props): JSX.Element => {
       {...stylex.props(
         styles.screen,
         shouldSetScreenAspectRatio && styles.screenAspectRatio,
+        style,
       )}
     >
       {children}

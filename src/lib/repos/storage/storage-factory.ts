@@ -2,7 +2,9 @@ import { safeParse } from '@lib';
 import type { PlainObject } from '@types';
 
 const createStorageRepo = (storage: Storage) => {
-  return <T extends string | number | boolean | PlainObject | null>(key: string) => ({
+  return <T extends string | number | boolean | PlainObject | null>(
+    key: string,
+  ) => ({
     get: (): T | null => {
       const storedValue = storage.getItem(key);
 

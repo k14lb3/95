@@ -1,1 +1,7 @@
-export type BootStage = 'dos-loading' | 'dos-prompt' | 'dos-starting' | 'splash' | 'initializing' | 'booted';
+export type BootStage =
+  | 'dos-loading'
+  | 'dos-prompt'
+  | 'dos-starting'
+  | 'splash'
+  | 'initializing'
+  | 'booted';

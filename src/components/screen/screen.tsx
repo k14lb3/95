@@ -23,10 +23,6 @@ export const Screen = ({ style, children }: Props): JSX.Element => {
     useState<boolean>(false);
 
   useEffect(() => {
-    if (!windowSize.width || !windowSize.height) {
-      return;
-    }
-
     if (windowSize.width / windowSize.height >= 1.333) {
       setShouldSetScreenAspectRatio(true);
     } else {

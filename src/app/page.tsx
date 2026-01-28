@@ -92,16 +92,16 @@ export default (): JSX.Element => {
       passive: true,
     };
 
-    window.addEventListener('keydown', handler);
-    window.addEventListener(
+    globalThis.addEventListener('keydown', handler);
+    globalThis.addEventListener(
       'touchstart',
       handler,
       touchStartEventListenerOptions,
     );
 
     return () => {
-      window.removeEventListener('keydown', handler);
-      window.removeEventListener(
+      globalThis.removeEventListener('keydown', handler);
+      globalThis.removeEventListener(
         'touchstart',
         handler,
         touchStartEventListenerOptions,

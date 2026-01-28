@@ -7,10 +7,6 @@ export const Splash = (): JSX.Element => {
   const [objectFit, setObjectFit] = useState<'cover' | 'contain'>('cover');
 
   useEffect(() => {
-    if (!windowSize.width || !windowSize.height) {
-      return;
-    }
-
     if (windowSize.width / windowSize.height >= 1.333) {
       setObjectFit('contain');
     } else {

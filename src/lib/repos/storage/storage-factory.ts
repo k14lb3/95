@@ -24,6 +24,6 @@ const createStorageRepo = (storage: Storage) => {
 };
 
 export const storageFactory = {
-  createLocalStorage: createStorageRepo(window.localStorage),
-  createSessionStorage: createStorageRepo(window.sessionStorage),
+  createLocalStorage: createStorageRepo(globalThis.localStorage),
+  createSessionStorage: createStorageRepo(globalThis.sessionStorage),
 };

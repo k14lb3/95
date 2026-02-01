@@ -1,5 +1,5 @@
-import { storageFactory } from './storage-factory';
+import { createSessionStorageRepo } from './session-storage-repo-factory';
 
 export const sessionStorageRepo = {
-  isBooted: storageFactory.createSessionStorage<boolean>('is-booted'),
+  isBooted: createSessionStorageRepo<boolean>({ key: 'is-booted' }),
 };

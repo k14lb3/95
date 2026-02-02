@@ -1,12 +1,12 @@
 import type { PlainObject } from '@types';
-import { StorageRepo } from './storage';
+import { StorageRepo } from './storage-repo';
 
-export const createLocalStorageRepo = <
+export const createSessionStorageRepo = <
   T extends string | number | boolean | PlainObject | null,
 >({
   key,
 }: {
   key: string;
 }): StorageRepo<T> => {
-  return new StorageRepo({ storage: globalThis.localStorage, key });
+  return new StorageRepo({ storage: globalThis.sessionStorage, key });
 };

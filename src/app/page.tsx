@@ -1,11 +1,12 @@
 'use client';
 
 import { Desktop, Dos, Screen, Splash } from '@components';
+import { useEventListener } from '@hooks';
 import { getRandomNumber, sessionStorageRepo, sleep } from '@lib';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { BootStage } from '@types';
-import { type JSX, useEffect, useState } from 'react';
+import { type JSX, useEffect, useEffectEvent, useState } from 'react';
 
 const styles = stylex.create({
   cursorNone: {
@@ -31,6 +32,41 @@ export default (): JSX.Element => {
   >(styles.cursorNone);
   const [bootStage, setBootStage] = useState<BootStage>('dos-loading');
 
+  const startBootSequence = useEffectEvent(async () => {
+    if (bootStage !== 'dos-prompt') {
+      return;
+    }
+
+    setBootStage('dos-loading');
+    await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
+
+    setBootStage('dos-starting');
+    await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
+
+    setBootStage('dos-loading');
+    await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
+
+    setBootStage('splash');
+    await sleep({ ms: 7000 });
+
+    setBootStage('initializing');
+    setCursorStyle(styles.cursorDefault);
+    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+    setCursorStyle(styles.cursorProgress);
+    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+    setCursorStyle(styles.cursorDefault);
+    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+    setCursorStyle(styles.cursorWait);
+    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+    setCursorStyle(styles.cursorDefault);
+    setBootStage('booted');
+    setCursorStyle(styles.cursorWait);
+  });
+
   useEffect(() => {
     const timeoutId = setTimeout(
       () => {
@@ -52,62 +88,12 @@ export default (): JSX.Element => {
     };
   }, []);
 
-  useEffect(() => {
-    const handler = async () => {
-      if (bootStage !== 'dos-prompt') {
-        return;
-      }
-
-      setBootStage('dos-loading');
-      await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
-
-      setBootStage('dos-starting');
-      await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
-
-      setBootStage('dos-loading');
-      await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
-
-      setBootStage('splash');
-      await sleep({ ms: 7000 });
-
-      setBootStage('initializing');
-      setCursorStyle(styles.cursorDefault);
-      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-      setCursorStyle(styles.cursorProgress);
-      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-      setCursorStyle(styles.cursorDefault);
-      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-      setCursorStyle(styles.cursorWait);
-      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-      setCursorStyle(styles.cursorDefault);
-      setBootStage('booted');
-      setCursorStyle(styles.cursorWait);
-    };
-
-    const touchStartEventListenerOptions: AddEventListenerOptions = {
-      passive: true,
-    };
-
-    globalThis.addEventListener('keydown', handler);
-    globalThis.addEventListener(
-      'touchstart',
-      handler,
-      touchStartEventListenerOptions,
-    );
-
-    return () => {
-      globalThis.removeEventListener('keydown', handler);
-      globalThis.removeEventListener(
-        'touchstart',
-        handler,
-        touchStartEventListenerOptions,
-      );
-    };
-  }, [bootStage]);
+  useEventListener({ eventName: 'keydown', handler: startBootSequence });
+  useEventListener({
+    eventName: 'keydown',
+    handler: startBootSequence,
+    options: { passive: true },
+  });
 
   return (
     <Screen style={cursorStyle}>

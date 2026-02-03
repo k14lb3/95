@@ -1,9 +1,7 @@
-import type { PlainObject } from '@types';
+import type { StorageValue } from '@types';
 import { StorageRepo } from './storage-repo';
 
-export const createSessionStorageRepo = <
-  T extends string | number | boolean | PlainObject | null,
->({
+export const createSessionStorageRepo = <T extends StorageValue>({
   key,
 }: {
   key: string;

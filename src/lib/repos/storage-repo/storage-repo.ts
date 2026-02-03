@@ -1,9 +1,7 @@
 import { safeParse } from '@lib';
-import type { PlainObject } from '@types';
+import type { StorageValue } from '@types';
 
-export class StorageRepo<
-  T extends string | number | boolean | PlainObject | null,
-> {
+export class StorageRepo<T extends StorageValue> {
   private storage: globalThis.Storage;
   private key: string;
 

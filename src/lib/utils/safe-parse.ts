@@ -1,8 +1,6 @@
-import type { PlainObject } from '@types';
+import type { StorageValue } from '@types';
 
-export const safeParse = <
-  T extends string | number | boolean | null | PlainObject,
->(
+export const safeParse = <T extends StorageValue>(
   jsonString: string,
 ): T | null => {
   try {

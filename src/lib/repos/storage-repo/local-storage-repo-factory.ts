@@ -6,5 +6,5 @@ export const createLocalStorageRepo = <T extends StorageValue>({
 }: {
   key: string;
 }): StorageRepo<T> => {
-  return new StorageRepo({ storage: globalThis.localStorage, key });
+  return new StorageRepo<T>({ storage: globalThis.localStorage, key });
 };

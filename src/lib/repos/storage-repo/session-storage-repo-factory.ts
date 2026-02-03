@@ -6,5 +6,5 @@ export const createSessionStorageRepo = <T extends StorageValue>({
 }: {
   key: string;
 }): StorageRepo<T> => {
-  return new StorageRepo({ storage: globalThis.sessionStorage, key });
+  return new StorageRepo<T>({ storage: globalThis.sessionStorage, key });
 };

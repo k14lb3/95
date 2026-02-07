@@ -9,7 +9,7 @@ import {
   sessionStorageRepo,
   sleep,
 } from '@lib';
-import { useFileSystemObjectStore } from '@stores';
+import { useFileSystemObjectStoreAction } from '@stores';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { BootStage } from '@types';
@@ -39,7 +39,7 @@ export default (): JSX.Element => {
     | typeof styles.cursorWait
   >(styles.cursorNone);
   const [bootStage, setBootStage] = useState<BootStage>('dos-loading');
-  const fileSystemObjectStore = useFileSystemObjectStore();
+  const fileSystemObjectStore = useFileSystemObjectStoreAction();
 
   const startBootSequence = useEffectEvent(async () => {
     if (bootStage !== 'dos-prompt') {

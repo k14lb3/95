@@ -1,71 +1,88 @@
 import { localStorageRepo } from '@lib';
-import type { FileSystemObject } from '@types';
+import type { FileSystemObject, Position } from '@types';
 import { create } from 'zustand';
 import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-import { useShallow } from 'zustand/react/shallow';
 
 export type FileSystemObjectStore = {
-  fileSystemObjects: FileSystemObject[];
-  set: (args: { fileSystemObjects: FileSystemObject[] }) => void;
-  add: (args: { fileSystemObject: FileSystemObject }) => void;
-  remove: (args: { fileSystemObjectId: string }) => void;
-  get: (args: { fileSystemObjectId: string }) => FileSystemObject | undefined;
-  getAll: () => FileSystemObject[];
-  getAllByParentId: (args: {
-    parentId: FileSystemObject['parentId'];
-  }) => FileSystemObject[];
+  state: {
+    fileSystemObjects: FileSystemObject[];
+  };
+  action: {
+    set: (args: { fileSystemObjects: FileSystemObject[] }) => void;
+    add: (args: { fileSystemObject: FileSystemObject }) => void;
+    remove: (args: { fileSystemObjectId: string }) => void;
+    move: (args: { fileSystemObjectId: string; position: Position }) => void;
+  };
 };
 
-export const useFileSystemObjectStore = () => {
-  return create(
-    persist(
-      immer<FileSystemObjectStore>((set, get) => {
-        return {
+const store = create<FileSystemObjectStore>()(
+  persist(
+    immer((set) => {
+      return {
+        state: {
           fileSystemObjects: [],
+        },
+        action: {
           set: ({ fileSystemObjects }) => {
-            return set({ fileSystemObjects });
+            return set((store) => {
+              store.state.fileSystemObjects = fileSystemObjects;
+            });
           },
           add: ({ fileSystemObject }) => {
-            return set((state) => {
-              state.fileSystemObjects.push(fileSystemObject);
+            set((store) => {
+              store.state.fileSystemObjects.push(fileSystemObject);
             });
           },
           remove: ({ fileSystemObjectId }) => {
-            return get().fileSystemObjects.filter((fileSystemObject) => {
-              return fileSystemObject.id !== fileSystemObjectId;
+            set((store) => {
+              store.state.fileSystemObjects.filter((fileSystemObject) => {
+                return fileSystemObject.id !== fileSystemObjectId;
+              });
             });
           },
-          get: ({ fileSystemObjectId }) => {
-            return get().fileSystemObjects.find((fileSystemObject) => {
-              return fileSystemObject.id === fileSystemObjectId;
+          move: ({ fileSystemObjectId, position }) => {
+            return set(({ state }) => {
+              const fileSystemObject = state.fileSystemObjects.find(
+                (fileSystemObject) => {
+                  return fileSystemObject.id === fileSystemObjectId;
+                },
+              );
+
+              if (!fileSystemObject) {
+                return;
+              }
+
+              fileSystemObject.position = position;
             });
           },
-          getAll: () => {
-            return get().fileSystemObjects;
-          },
-          getAllByParentId: ({ parentId }) => {
-            return get().fileSystemObjects.filter((fileSystemObject) => {
-              return fileSystemObject.parentId === parentId;
-            });
-          },
-        };
+        },
+      };
+    }),
+    {
+      name: localStorageRepo.fileSystemObjects.getKey(),
+      storage: createJSONStorage(() => {
+        return globalThis.localStorage;
       }),
-      {
-        name: localStorageRepo.fileSystemObjects.getKey(),
-        storage: createJSONStorage(() => {
-          return globalThis.localStorage;
-        }),
+      partialize: (store) => {
+        return {
+          state: store.state
+        }
       },
-    ),
-  )(
-    useShallow((state) => ({
-      set: state.set,
-      add: state.add,
-      remove: state.remove,
-      get: state.get,
-      getAll: state.getAll,
-      getAllByParentId: state.getAllByParentId,
-    })),
-  );
-};
+    },
+  ),
+);
+
+export const useFileSystemObjectStoreState =
+  (): FileSystemObjectStore['state'] => {
+    return store((store) => {
+      return store.state;
+    });
+  };
+
+export const useFileSystemObjectStoreAction =
+  (): FileSystemObjectStore['action'] => {
+    return store((store) => {
+      return store.action;
+    });
+  };

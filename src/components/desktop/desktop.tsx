@@ -1,5 +1,6 @@
 import { Taskbar } from '@components';
 import { getRandomNumber, sessionStorageRepo } from '@lib';
+import { useDragStoreAction } from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import { type JSX, useEffect, useEffectEvent, useState } from 'react';
@@ -24,7 +25,12 @@ type Props = {
 };
 
 export const Desktop = ({ onShowUI }: Props): JSX.Element => {
+  const dragStoreAction = useDragStoreAction();
   const [shouldShowUI, setShouldShowUI] = useState<boolean>(false);
+
+  const onMouseUp = (): void => {
+    dragStoreAction.drop();
+  };
 
   useEffect(() => {
     const timeoutId = setTimeout(
@@ -53,7 +59,7 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
   }, []);
 
   return (
-    <div {...stylex.props(styles.desktop)}>
+    <div {...stylex.props(styles.desktop)} onMouseUp={onMouseUp}>
       {shouldShowUI && (
         <>
           <FileSystemObjects />

@@ -2,11 +2,19 @@
 
 import { Desktop, Dos, Screen, Splash } from '@components';
 import { useEventListener } from '@hooks';
-import { getRandomNumber, sessionStorageRepo, sleep } from '@lib';
+import {
+  getEpochMs,
+  getRandomNumber,
+  localStorageRepo,
+  sessionStorageRepo,
+  sleep,
+} from '@lib';
+import { useFileSystemObjectStore } from '@stores';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { BootStage } from '@types';
 import { type JSX, useEffect, useEffectEvent, useState } from 'react';
+import { FILE_SYSTEM_OBJECTS } from '../constants/defaults/file-system-objects';
 
 const styles = stylex.create({
   cursorNone: {
@@ -31,6 +39,7 @@ export default (): JSX.Element => {
     | typeof styles.cursorWait
   >(styles.cursorNone);
   const [bootStage, setBootStage] = useState<BootStage>('dos-loading');
+  const fileSystemObjectStore = useFileSystemObjectStore();
 
   const startBootSequence = useEffectEvent(async () => {
     if (bootStage !== 'dos-prompt') {
@@ -88,6 +97,16 @@ export default (): JSX.Element => {
     };
   }, []);
 
+  useEffect(() => {
+    const firstVisitAtEpochMs = localStorageRepo.firstVisitAtEpochMs.get();
+
+    if (firstVisitAtEpochMs) {
+      return;
+    }
+
+    fileSystemObjectStore.set({ fileSystemObjects: FILE_SYSTEM_OBJECTS });
+  }, [fileSystemObjectStore.set]);
+
   useEventListener({ eventName: 'keydown', handler: startBootSequence });
   useEventListener({
     eventName: 'keydown',
@@ -143,6 +162,7 @@ export default (): JSX.Element => {
               <Desktop
                 onShowUI={() => {
                   sessionStorageRepo.isBooted.set(true);
+                  localStorageRepo.firstVisitAtEpochMs.set(getEpochMs.now());
                   setCursorStyle(styles.cursorDefault);
                 }}
               />

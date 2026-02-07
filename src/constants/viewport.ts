@@ -1,0 +1,1 @@
+export const BASE_VIEWPORT_HEIGHT = 768;

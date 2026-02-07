@@ -30,4 +30,8 @@ export class StorageRepo<T extends StorageValue> {
   public remove(): void {
     this.storage.removeItem(this.key);
   }
+
+  public getKey(): string {
+    return this.key;
+  }
 }

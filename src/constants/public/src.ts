@@ -1,0 +1,30 @@
+import { PATH } from './path';
+
+export const SRC = {
+  ICON: {
+    LOGO: `${PATH.IMAGES}/icons/95.png`,
+    ABOUT: `${PATH.IMAGES}/icons/about.png`,
+    CALCULATOR: `${PATH.IMAGES}/icons/calculator.png`,
+    CONTACT: `${PATH.IMAGES}/icons/contact.png`,
+    CURSOR_DEFAULT: `${PATH.IMAGES}/icons/cursor-default.png`,
+    CURSOR_EW_RESIZE: `${PATH.IMAGES}/icons/cursor-ew-resize.png`,
+    CURSOR_NESW_RESIZE: `${PATH.IMAGES}/icons/cursor-nesw-resize.png`,
+    CURSOR_NS_RESIZE: `${PATH.IMAGES}/icons/cursor-ns-resize.png`,
+    CURSOR_NWSE_RESIZE: `${PATH.IMAGES}/icons/cursor-nwse-resize.png`,
+    CURSOR_POINTER: `${PATH.IMAGES}/icons/cursor-pointer.png`,
+    CURSOR_PROGRESS: `${PATH.IMAGES}/icons/cursor-progress.png`,
+    CURSOR_WAIT: `${PATH.IMAGES}/icons/cursor-wait.png`,
+    CV: `${PATH.IMAGES}/icons/cv.png`,
+    FOLDER_OPENED: `${PATH.IMAGES}/icons/folder-opened.png`,
+    FOLDER: `${PATH.IMAGES}/icons/folder.png`,
+    GITHUB: `${PATH.IMAGES}/icons/github.png`,
+    INTERNET: `${PATH.IMAGES}/icons/internet.png`,
+    LINKEDIN: `${PATH.IMAGES}/icons/linkedin.png`,
+    MINECRAFT: `${PATH.IMAGES}/icons/minecraft.png`,
+    PROGRAMS: `${PATH.IMAGES}/icons/programs.png`,
+    RECYCLE_BIN: `${PATH.IMAGES}/icons/recycle-bin.png`,
+    SHUT_DOWN: `${PATH.IMAGES}/icons/shut-down.png`,
+    START_MENU_ITEM_ARROW: `${PATH.IMAGES}/icons/start-menu-item-arrow.png`,
+    TWITTER: `${PATH.IMAGES}/icons/twitter.png`,
+  },
+} as const;

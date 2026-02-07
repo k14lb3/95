@@ -2,10 +2,12 @@ import { Taskbar } from '@components';
 import { getRandomNumber, sessionStorageRepo } from '@lib';
 import { color } from '@stylex/color.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import { type JSX, useEffect, useState } from 'react';
+import { type JSX, useEffect, useEffectEvent, useState } from 'react';
+import { FileSystemObjects } from './file-system-objects';
 
 const styles = stylex.create({
   desktop: {
+    position: 'relative',
     height: 'inherit',
     backgroundColor: color.teal,
     display: 'flex',
@@ -44,17 +46,20 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
     };
   }, []);
 
-  useEffect(() => {
-    if (!shouldShowUI) {
-      return;
-    }
+  const onShowUiEffectEvent = useEffectEvent(onShowUI);
 
-    onShowUI();
-  }, [shouldShowUI, onShowUI]);
+  useEffect(() => {
+    onShowUiEffectEvent();
+  }, []);
 
   return (
     <div {...stylex.props(styles.desktop)}>
-      {shouldShowUI && <Taskbar style={styles.taskbar} />}
+      {shouldShowUI && (
+        <>
+          <FileSystemObjects />
+          <Taskbar style={styles.taskbar} />
+        </>
+      )}
     </div>
   );
 };

@@ -24,6 +24,7 @@
       "@constants": ["./src/constants/index.ts"],
       "@hooks": ["./src/hooks/index.ts"],
       "@lib": ["./src/lib/index.ts"],
+      "@stores": ["./src/stores/index.ts"],
       "@types": ["./src/types/index.ts"],
       "@stylex/color.stylex.ts": ["./src/stylex/consts/color.stylex.ts"],
       "@stylex/px.stylex.ts": ["./src/stylex/consts/px.stylex.ts"],

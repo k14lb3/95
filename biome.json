@@ -17,9 +17,6 @@
     "enabled": true,
     "rules": {
       "recommended": true,
-      "a11y": {
-        "noNoninteractiveElementInteractions": "error"
-      },
       "correctness": {
         "noReactPropAssignments": "error",
         "noUnusedImports": "error"

@@ -6,7 +6,7 @@ export type DragStore = {
     draggedId: string | null;
   };
   action: {
-    drag: (args: { id: string }) => void;
+    drag: (args: { draggedId: string }) => void;
     drop: () => void;
   };
 };
@@ -18,9 +18,9 @@ const store = create<DragStore>()(
         draggedId: null,
       },
       action: {
-        drag: ({ id }) => {
+        drag: ({ draggedId }) => {
           set((store) => {
-            store.state.draggedId = id;
+            store.state.draggedId = draggedId;
           });
         },
         drop: () => {

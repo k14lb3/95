@@ -62,7 +62,7 @@ export const FileSystemObject = ({ fileSystemObject }: Props): JSX.Element => {
       y: event.clientY - containerRect.top,
     };
 
-    dragStoreAction.drag({ id: fileSystemObject.id });
+    dragStoreAction.drag({ draggedId: fileSystemObject.id });
   };
 
   useEffect(() => {

@@ -9,6 +9,7 @@ import { Start } from './start';
 const styles = stylex.create({
   taskbar: {
     height: px[28],
+    marginTop: 'auto',
     backgroundColor: color.silver,
     borderTopWidth: px[1],
     borderTopStyle: 'solid',
@@ -30,17 +31,13 @@ const styles = stylex.create({
   },
 });
 
-type Props = {
-  style?: stylex.StyleXStyles;
-};
-
-export const Taskbar = ({ style }: Props): JSX.Element => {
+export const Taskbar = (): JSX.Element => {
   return (
     <Nest
       tag='div'
       count={3}
       styles={[
-        [styles.taskbar, style],
+        [styles.taskbar],
         [styles.taskbarInner1],
         [styles.taskbarInner2],
       ]}

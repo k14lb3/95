@@ -1,7 +1,7 @@
 import { color } from '@stylex/color.stylex.ts';
 import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import { type JSX, useEffect, useEffectEvent, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 
 const styles = stylex.create({
   clock: {
@@ -23,14 +23,14 @@ const styles = stylex.create({
 export const Clock = (): JSX.Element => {
   const [time, setTime] = useState<string>('00:00');
 
-  const getTime = useEffectEvent((): string => {
-    return new Date().toLocaleTimeString([], {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  });
-
   useEffect(() => {
+    const getTime = (): string => {
+      return new Date().toLocaleTimeString([], {
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    };
+
     const intervalId = setInterval(() => {
       setTime(getTime());
     }, 60000);

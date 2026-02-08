@@ -1,11 +1,9 @@
-import type { FileSystemObject } from '@types';
-import { Fragment, type JSX, type MouseEvent } from 'react';
-import { Folder } from '../file-system-object/folder';
-import { Link } from '../file-system-object/link';
-import { RecycleBin } from '../file-system-object/recycle-bin';
+import type { FileSystemObject as FileSystemObjectType } from '@types';
+import type { JSX, MouseEvent } from 'react';
+import { FileSystemObject } from '../file-system-object';
 
 type Props = {
-  fileSystemObjects: FileSystemObject[];
+  fileSystemObjects: FileSystemObjectType[];
   highlightedFileSystemObjectId: string | null;
   setHighlightedFileSystemObjectId: (
     highlightedFileSystemObjectId: string | null,
@@ -34,47 +32,14 @@ export const FileSystemObjects = ({
       setLastHighlightedFileSystemObjectId(fileSystemObject.id);
     };
 
-    console.log({
-      highlightedFileSystemObjectId,
-      lastHighlightedFileSystemObjectId,
-    });
-
     return (
-      <Fragment key={fileSystemObject.id}>
-        {(() => {
-          switch (fileSystemObject.type) {
-            case 'link':
-              return (
-                <Link
-                  link={fileSystemObject}
-                  isHighlighted={isHighlighted}
-                  isLastHighlighted={isLastHighlighted}
-                  onMouseDown={onMouseDown}
-                />
-              );
-            case 'folder':
-              return (
-                <Folder
-                  folder={fileSystemObject}
-                  isHighlighted={isHighlighted}
-                  isLastHighlighted={isLastHighlighted}
-                  onMouseDown={onMouseDown}
-                />
-              );
-            case 'recycle-bin':
-              return (
-                <RecycleBin
-                  recycleBin={fileSystemObject}
-                  isLastHighlighted={isLastHighlighted}
-                  isHighlighted={isHighlighted}
-                  onMouseDown={onMouseDown}
-                />
-              );
-            default:
-              return null;
-          }
-        })()}
-      </Fragment>
+      <FileSystemObject
+        key={fileSystemObject.id}
+        fileSystemObject={fileSystemObject}
+        isHighlighted={isHighlighted}
+        isLastHighlighted={isLastHighlighted}
+        onMouseDown={onMouseDown}
+      />
     );
   });
 };

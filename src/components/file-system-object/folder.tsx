@@ -1,11 +1,14 @@
 import type { Folder as FolderType } from '@types';
 import type { JSX } from 'react';
-import { FileSystemObject, type FileSystemObjectProps } from '.';
+import {
+  BaseFileSystemObject,
+  type BaseFileSystemObjectProps,
+} from './base-file-system-object';
 
 type Props = {
   folder: FolderType;
 } & Pick<
-  FileSystemObjectProps,
+  BaseFileSystemObjectProps,
   'isHighlighted' | 'isLastHighlighted' | 'onMouseDown'
 >;
 
@@ -16,7 +19,7 @@ export const Folder = ({
   onMouseDown,
 }: Props): JSX.Element => {
   return (
-    <FileSystemObject
+    <BaseFileSystemObject
       fileSystemObject={folder}
       isHighlighted={isHighlighted}
       isLastHighlighted={isLastHighlighted}

@@ -1,11 +1,14 @@
 import type { RecycleBin as RecycleBinType } from '@types';
 import type { JSX } from 'react';
-import { FileSystemObject, type FileSystemObjectProps } from '.';
+import {
+  BaseFileSystemObject,
+  type BaseFileSystemObjectProps,
+} from './base-file-system-object';
 
 type Props = {
   recycleBin: RecycleBinType;
 } & Pick<
-  FileSystemObjectProps,
+  BaseFileSystemObjectProps,
   'isHighlighted' | 'isLastHighlighted' | 'onMouseDown'
 >;
 
@@ -16,7 +19,7 @@ export const RecycleBin = ({
   onMouseDown,
 }: Props): JSX.Element => {
   return (
-    <FileSystemObject
+    <BaseFileSystemObject
       fileSystemObject={recycleBin}
       isHighlighted={isHighlighted}
       isLastHighlighted={isLastHighlighted}

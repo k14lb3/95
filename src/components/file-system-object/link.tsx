@@ -1,14 +1,14 @@
 import type { Link as LinkType } from '@types';
 import type { JSX } from 'react';
 import {
-  FileSystemObject,
-  type FileSystemObjectProps,
-} from './file-system-object';
+  BaseFileSystemObject,
+  type BaseFileSystemObjectProps,
+} from './base-file-system-object';
 
 type Props = {
   link: LinkType;
 } & Pick<
-  FileSystemObjectProps,
+  BaseFileSystemObjectProps,
   'isHighlighted' | 'isLastHighlighted' | 'onMouseDown'
 >;
 
@@ -19,7 +19,7 @@ export const Link = ({
   onMouseDown,
 }: Props): JSX.Element => {
   return (
-    <FileSystemObject
+    <BaseFileSystemObject
       fileSystemObject={link}
       isHighlighted={isHighlighted}
       isLastHighlighted={isLastHighlighted}

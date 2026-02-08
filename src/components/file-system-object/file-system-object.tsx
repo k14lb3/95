@@ -11,10 +11,13 @@ import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { FileSystemObject as FileSystemObjectType } from '@types';
 import Image from 'next/image';
-import { type JSX, useEffect, useRef } from 'react';
+import { type JSX, type MouseEvent, useEffect, useRef } from 'react';
 
-type Props = {
+export type FileSystemObjectProps = {
   fileSystemObject: FileSystemObjectType;
+  isHighlighted: boolean;
+  isLastHighlighted: boolean;
+  onMouseDown: (mouseEvent: MouseEvent) => void;
 };
 
 const styles = stylex.create({
@@ -31,17 +34,39 @@ const styles = stylex.create({
     position: 'relative',
     aspectRatio: '1/1',
   },
+  iconImageMask: {
+    position: 'absolute',
+    opacity: '70%',
+    inset: 0,
+    backgroundColor: color.blue,
+    maskRepeat: 'no-repeat',
+    WebkitMaskRepeat: 'no-repeat',
+    maskSize: px[32],
+    WebkitMaskSize: px[32],
+  },
   label: {
-    paddingHorizontal: px[4],
+    padding: px[1],
     marginTop: px[4],
     borderWidth: px[1],
     borderStyle: 'dotted',
     borderColor: color.transparent,
     fontSize: px[12],
   },
+  labelHighlighted: {
+    borderColor: color.yellow,
+    backgroundColor: color.blue,
+  },
+  labelLastHighlighted: {
+    borderColor: color.yellow,
+  },
 });
 
-export const FileSystemObject = ({ fileSystemObject }: Props): JSX.Element => {
+export const FileSystemObject = ({
+  fileSystemObject,
+  isHighlighted,
+  isLastHighlighted,
+  onMouseDown: onMouseDownCallback,
+}: FileSystemObjectProps): JSX.Element => {
   const dragStoreAction = useDragStoreAction();
   const dragStoreState = useDragStoreState();
 
@@ -50,19 +75,31 @@ export const FileSystemObject = ({ fileSystemObject }: Props): JSX.Element => {
   const containerRef = useRef<HTMLDivElement>(null);
   const grabOffsetRef = useRef({ x: 0, y: 0 });
 
-  const onMouseDown = (event: React.MouseEvent): void => {
+  const onMouseDown = (mouseEvent: MouseEvent): void => {
     const container = containerRef.current;
-    if (!container) {
-      return;
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      grabOffsetRef.current = {
+        x: mouseEvent.clientX - containerRect.left,
+        y: mouseEvent.clientY - containerRect.top,
+      };
+
+      dragStoreAction.drag({ draggedId: fileSystemObject.id });
     }
 
-    const containerRect = container.getBoundingClientRect();
-    grabOffsetRef.current = {
-      x: event.clientX - containerRect.left,
-      y: event.clientY - containerRect.top,
-    };
+    onMouseDownCallback(mouseEvent);
+  };
 
-    dragStoreAction.drag({ draggedId: fileSystemObject.id });
+  const renderIconImageMask = (): JSX.Element => {
+    return (
+      <div
+        {...stylex.props(styles.iconImageMask)}
+        style={{
+          maskImage: `url(${fileSystemObject.iconSrc})`,
+          WebkitMaskImage: `url(${fileSystemObject.iconSrc})`,
+        }}
+      />
+    );
   };
 
   useEffect(() => {
@@ -103,8 +140,17 @@ export const FileSystemObject = ({ fileSystemObject }: Props): JSX.Element => {
           alt={fileSystemObject.label}
           fill={true}
         />
+        {isHighlighted && renderIconImageMask()}
       </div>
-      <div {...stylex.props(styles.label)}>{fileSystemObject.label}</div>
+      <div
+        {...stylex.props(
+          styles.label,
+          isHighlighted && styles.labelHighlighted,
+          isLastHighlighted && styles.labelLastHighlighted,
+        )}
+      >
+        {fileSystemObject.label}
+      </div>
     </div>
   );
 };

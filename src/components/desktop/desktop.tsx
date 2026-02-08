@@ -1,11 +1,18 @@
 import { Taskbar } from '@components';
-import { getRandomNumber, sessionStorageRepo } from '@lib';
-import { useDragStoreAction } from '@stores';
+import {
+  getFileSystemObjectsByParentId,
+  getRandomNumber,
+  sessionStorageRepo,
+} from '@lib';
+import {
+  useDragStoreAction,
+  useFileSystemObjectStoreState,
+  useFocusedStoreAction,
+} from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import { type JSX, useEffect, useEffectEvent, useState } from 'react';
-import { useFocusedStoreAction } from '../../stores/use-focused-store';
-import { FileSystemObjects } from './file-system-objects';
+import { FileSystemObjects } from '../file-system-objects';
 
 const styles = stylex.create({
   desktop: {
@@ -16,9 +23,6 @@ const styles = stylex.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
-  taskbar: {
-    marginTop: 'auto',
-  },
 });
 
 type Props = {
@@ -26,13 +30,30 @@ type Props = {
 };
 
 export const Desktop = ({ onShowUI }: Props): JSX.Element => {
+  const fileSystemObjectStoreState = useFileSystemObjectStoreState();
   const focusedStoreAction = useFocusedStoreAction();
   const dragStoreAction = useDragStoreAction();
 
   const [shouldShowUI, setShouldShowUI] = useState<boolean>(false);
+  const [highlightedFileSystemObjectId, setHighlightedFileSystemObjectId] =
+    useState<string | null>(null);
+  const [
+    lastHighlightedFileSystemObjectId,
+    setLastHighlightedFileSystemObjectId,
+  ] = useState<string | null>(null);
+
+  const fileSystemObjects = getFileSystemObjectsByParentId({
+    fileSystemObjects: fileSystemObjectStoreState.fileSystemObjects,
+    parentId: 'desktop',
+  });
 
   const onMouseDown = (): void => {
     focusedStoreAction.focus({ focusedId: 'desktop' });
+
+    if (highlightedFileSystemObjectId) {
+      setHighlightedFileSystemObjectId(null);
+      setLastHighlightedFileSystemObjectId(highlightedFileSystemObjectId);
+    }
   };
 
   const onMouseUp = (): void => {
@@ -73,8 +94,18 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
     >
       {shouldShowUI && (
         <>
-          <FileSystemObjects />
-          <Taskbar style={styles.taskbar} />
+          <FileSystemObjects
+            fileSystemObjects={fileSystemObjects}
+            highlightedFileSystemObjectId={highlightedFileSystemObjectId}
+            setHighlightedFileSystemObjectId={setHighlightedFileSystemObjectId}
+            lastHighlightedFileSystemObjectId={
+              lastHighlightedFileSystemObjectId
+            }
+            setLastHighlightedFileSystemObjectId={
+              setLastHighlightedFileSystemObjectId
+            }
+          />
+          <Taskbar />
         </>
       )}
     </div>

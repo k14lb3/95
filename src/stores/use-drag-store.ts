@@ -4,7 +4,6 @@ import { immer } from 'zustand/middleware/immer';
 
 export type DragStore = {
   state: {
-    isDragging: boolean;
     draggedId: string | null;
   };
   action: {
@@ -17,19 +16,16 @@ const store = create<DragStore>()(
   immer((set) => {
     return {
       state: {
-        isDragging: false,
         draggedId: null,
       },
       action: {
         drag: ({ id }) => {
           set((store) => {
-            store.state.isDragging = true;
             store.state.draggedId = id;
           });
         },
         drop: () => {
           set((store) => {
-            store.state.isDragging = false;
             store.state.draggedId = null;
           });
         },

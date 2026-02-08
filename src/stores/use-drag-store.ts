@@ -1,4 +1,3 @@
-import type { DesktopId } from '@types';
 import { create } from 'zustand';
 import { immer } from 'zustand/middleware/immer';
 
@@ -7,7 +6,7 @@ export type DragStore = {
     draggedId: string | null;
   };
   action: {
-    drag: (args: { id: DesktopId | (string & {}) }) => void;
+    drag: (args: { id: string }) => void;
     drop: () => void;
   };
 };

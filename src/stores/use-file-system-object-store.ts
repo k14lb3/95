@@ -66,8 +66,8 @@ const store = create<FileSystemObjectStore>()(
       }),
       partialize: (store) => {
         return {
-          state: store.state
-        }
+          state: store.state,
+        };
       },
     },
   ),

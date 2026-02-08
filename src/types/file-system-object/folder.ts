@@ -1,4 +1,4 @@
-import type { BaseFileSystemObject } from './file-system-object';
+import type { BaseFileSystemObject } from './base-file-system-object';
 
 export type Folder = BaseFileSystemObject & {
   type: 'folder';

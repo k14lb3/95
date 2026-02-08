@@ -1,11 +1,5 @@
-import type { FileSystemObjectType, Position } from '@types';
-import type { DesktopId } from './desktop-id';
+import type { Folder } from './folder';
+import type { Link } from './link';
+import type { RecycleBin } from './recycle-bin';
 
-export type BaseFileSystemObject = {
-  type: FileSystemObjectType;
-  id: string;
-  parentId: DesktopId | (string & {});
-  label: string;
-  iconSrc: string;
-  position: Position;
-};
+export type FileSystemObject = Folder | Link | RecycleBin;

@@ -4,6 +4,7 @@ import { useDragStoreAction } from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import { type JSX, useEffect, useEffectEvent, useState } from 'react';
+import { useFocusedStoreAction } from '../../stores/use-focused-store';
 import { FileSystemObjects } from './file-system-objects';
 
 const styles = stylex.create({
@@ -25,8 +26,14 @@ type Props = {
 };
 
 export const Desktop = ({ onShowUI }: Props): JSX.Element => {
+  const focusedStoreAction = useFocusedStoreAction();
   const dragStoreAction = useDragStoreAction();
+
   const [shouldShowUI, setShouldShowUI] = useState<boolean>(false);
+
+  const onMouseDown = (): void => {
+    focusedStoreAction.focus({ focusedId: 'desktop' });
+  };
 
   const onMouseUp = (): void => {
     dragStoreAction.drop();
@@ -59,7 +66,11 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
   }, []);
 
   return (
-    <div {...stylex.props(styles.desktop)} onMouseUp={onMouseUp}>
+    <div
+      {...stylex.props(styles.desktop)}
+      onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
+    >
       {shouldShowUI && (
         <>
           <FileSystemObjects />

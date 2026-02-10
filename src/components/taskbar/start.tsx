@@ -3,7 +3,7 @@ import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import Image from 'next/image';
 import type { JSX } from 'react';
-import { Nest } from '../nest';
+import { NestedDiv } from '../nest';
 
 const styles = stylex.create({
   start: {
@@ -45,8 +45,7 @@ const styles = stylex.create({
 
 export const Start = (): JSX.Element => {
   return (
-    <Nest
-      tag='div'
+    <NestedDiv
       count={3}
       styles={[[styles.start], [styles.startInner1], [styles.startInner2]]}
     >
@@ -60,6 +59,6 @@ export const Start = (): JSX.Element => {
         />
       </div>
       <div {...stylex.props(styles.label)}>Start</div>
-    </Nest>
+    </NestedDiv>
   );
 };

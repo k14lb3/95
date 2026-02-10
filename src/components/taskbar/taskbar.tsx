@@ -2,7 +2,7 @@ import { color } from '@stylex/color.stylex.ts';
 import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { JSX } from 'react';
-import { Nest } from '../nest';
+import { NestedDiv } from '../nest';
 import { Clock } from './clock';
 import { Start } from './start';
 
@@ -33,8 +33,7 @@ const styles = stylex.create({
 
 export const Taskbar = (): JSX.Element => {
   return (
-    <Nest
-      tag='div'
+    <NestedDiv
       count={3}
       styles={[
         [styles.taskbar],
@@ -44,6 +43,6 @@ export const Taskbar = (): JSX.Element => {
     >
       <Start />
       <Clock />
-    </Nest>
+    </NestedDiv>
   );
 };

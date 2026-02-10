@@ -1,18 +1,19 @@
 import * as stylex from '@stylexjs/stylex';
-import type { JSX, PropsWithChildren } from 'react';
+import type { ComponentProps, PropsWithChildren } from 'react';
 
-type Props = PropsWithChildren<{
-  tag: keyof JSX.IntrinsicElements;
-  count?: number;
-  styles?: stylex.StyleXStyles[];
-}>;
+type Props = PropsWithChildren<
+  {
+    count?: number;
+    styles?: stylex.StyleXStyles[];
+  } & ComponentProps<'div'>
+>;
 
-export const Nest = ({
-  tag: Tag,
+export const NestedDiv = ({
   count = 1,
   styles = [],
   children,
-}: Props): JSX.Element => {
+  ...rest
+}: Props) => {
   if (count < 1) {
     throw new Error('`count` prop should be greater than 1.');
   }
@@ -20,18 +21,18 @@ export const Nest = ({
   const style = styles[0];
 
   if (count === 1) {
-    return <Tag {...stylex.props(style && style)}>{children}</Tag>;
+    return (
+      <div {...rest} {...stylex.props(style)}>
+        {children}
+      </div>
+    );
   }
 
   return (
-    <Tag {...stylex.props(style && style)}>
-      {count !== 1 ? (
-        <Nest tag={Tag} count={count - 1} styles={styles.slice(1)}>
-          {children}
-        </Nest>
-      ) : (
-        children
-      )}
-    </Tag>
+    <div {...rest} {...stylex.props(style)}>
+      <NestedDiv {...rest} count={count - 1} styles={styles.slice(1)}>
+        {children}
+      </NestedDiv>
+    </div>
   );
 };

@@ -1,3 +1,4 @@
+import { TASKBAR_ID } from '@constants';
 import { color } from '@stylex/color.stylex.ts';
 import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
@@ -34,6 +35,7 @@ const styles = stylex.create({
 export const Taskbar = (): JSX.Element => {
   return (
     <NestedDiv
+      id={TASKBAR_ID}
       count={3}
       styles={[
         [styles.taskbar],

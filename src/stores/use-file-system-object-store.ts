@@ -12,7 +12,10 @@ export type FileSystemObjectStore = {
     set: (args: { fileSystemObjects: FileSystemObject[] }) => void;
     add: (args: { fileSystemObject: FileSystemObject }) => void;
     remove: (args: { fileSystemObjectId: string }) => void;
-    move: (args: { fileSystemObjectId: string; position: Position }) => void;
+    move: (args: {
+      fileSystemObjectId: string;
+      position: Partial<Position>;
+    }) => void;
   };
 };
 
@@ -53,7 +56,13 @@ const store = create<FileSystemObjectStore>()(
                 return;
               }
 
-              fileSystemObject.position = position;
+              if (position.x !== undefined) {
+                fileSystemObject.position.x = position.x;
+              }
+
+              if (position.y !== undefined) {
+                fileSystemObject.position.y = position.y;
+              }
             });
           },
         },

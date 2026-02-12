@@ -1,3 +1,6 @@
+'use client';
+
+import { useDragStoreAction } from '@stores';
 import '@styles';
 
 import { color } from '@stylex/color.stylex.ts';
@@ -23,9 +26,18 @@ const styles = stylex.create({
 });
 
 export default ({ children }: Props): JSX.Element => {
+  const dragStoreAction = useDragStoreAction();
+
   return (
     <html lang='en' {...stylex.props(styles.html)}>
-      <body {...stylex.props(styles.body)}>{children}</body>
+      <body
+        onMouseUp={() => {
+          dragStoreAction.drop();
+        }}
+        {...stylex.props(styles.body)}
+      >
+        {children}
+      </body>
     </html>
   );
 };

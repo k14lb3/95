@@ -1,4 +1,5 @@
 import { Taskbar } from '@components';
+import { DESKTOP_ID } from '@constants';
 import {
   getFileSystemObjectsByParentId,
   getRandomNumber,
@@ -89,6 +90,7 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
   return (
     <div
       {...stylex.props(styles.desktop)}
+      id={DESKTOP_ID}
       onMouseDown={onMouseDown}
       onMouseUp={onMouseUp}
     >

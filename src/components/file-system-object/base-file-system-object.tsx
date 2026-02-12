@@ -1,6 +1,5 @@
-import { BASE_VIEWPORT_HEIGHT } from '@constants';
-import { useMousePosition } from '@hooks';
-import { pxToVh } from '@lib';
+import { useDesktopRect, useMousePosition } from '@hooks';
+import { pxToVh, viewportToDesignPx } from '@lib';
 import {
   useDragStoreAction,
   useDragStoreState,
@@ -9,9 +8,13 @@ import {
 import { color } from '@stylex/color.stylex.ts';
 import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import type { FileSystemObject as FileSystemObjectType } from '@types';
+import type {
+  FileSystemObject as FileSystemObjectType,
+  Position,
+} from '@types';
 import Image from 'next/image';
 import { type JSX, type MouseEvent, useEffect, useRef } from 'react';
+import { useTaskbarRect } from '../../hooks/use-taskbar-rect';
 
 export type BaseFileSystemObjectProps = {
   fileSystemObject: FileSystemObjectType;
@@ -67,21 +70,23 @@ export const BaseFileSystemObject = ({
   isLastHighlighted,
   onMouseDown: onMouseDownCallback,
 }: BaseFileSystemObjectProps): JSX.Element => {
+  const fileSystemObjectStore = useFileSystemObjectStoreAction();
   const dragStoreAction = useDragStoreAction();
   const dragStoreState = useDragStoreState();
 
-  const fileSystemObjectStore = useFileSystemObjectStoreAction();
+  const desktopRect = useDesktopRect();
+  const taskbarRect = useTaskbarRect();
   const mousePosition = useMousePosition();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const selfRef = useRef<HTMLDivElement>(null);
   const grabOffsetRef = useRef({ x: 0, y: 0 });
 
   const onMouseDown = (mouseEvent: MouseEvent): void => {
-    const container = containerRef.current;
-    if (container) {
-      const containerRect = container.getBoundingClientRect();
+    const self = selfRef.current;
+    if (self) {
+      const selfRect = self.getBoundingClientRect();
       grabOffsetRef.current = {
-        x: mouseEvent.clientX - containerRect.left,
-        y: mouseEvent.clientY - containerRect.top,
+        x: mouseEvent.clientX - selfRect.left,
+        y: mouseEvent.clientY - selfRect.top,
       };
 
       dragStoreAction.drag({ draggedId: fileSystemObject.id });
@@ -107,13 +112,15 @@ export const BaseFileSystemObject = ({
       return;
     }
 
-    const viewportToDesignScale = globalThis.innerHeight / BASE_VIEWPORT_HEIGHT;
-
     fileSystemObjectStore.move({
       fileSystemObjectId: fileSystemObject.id,
       position: {
-        x: (mousePosition.x - grabOffsetRef.current.x) / viewportToDesignScale,
-        y: (mousePosition.y - grabOffsetRef.current.y) / viewportToDesignScale,
+        x: viewportToDesignPx({
+          px: mousePosition.x - grabOffsetRef.current.x,
+        }),
+        y: viewportToDesignPx({
+          px: mousePosition.y - grabOffsetRef.current.y,
+        }),
       },
     });
   }, [
@@ -124,10 +131,57 @@ export const BaseFileSystemObject = ({
     fileSystemObjectStore,
   ]);
 
+  useEffect(() => {
+    const self = selfRef.current;
+    if (!self) {
+      return;
+    }
+
+    if (!desktopRect || !taskbarRect) {
+      return;
+    }
+
+    const selfRect = self.getBoundingClientRect();
+    const position: Partial<Position> = {};
+
+    if (fileSystemObject.position.x <= 0) {
+      position.x = 0;
+    } else if (selfRect.right >= desktopRect.right) {
+      position.x = viewportToDesignPx({
+        px: desktopRect.right - selfRect.width - desktopRect.left,
+      });
+    }
+
+    if (fileSystemObject.position.y <= 0) {
+      position.y = 0;
+    } else if (selfRect.bottom >= desktopRect.height - taskbarRect.height) {
+      position.y = viewportToDesignPx({
+        px: taskbarRect.top - selfRect.height,
+      });
+    }
+
+    if (position.x !== undefined || position.y !== undefined) {
+      fileSystemObjectStore.move({
+        fileSystemObjectId: fileSystemObject.id,
+        position,
+      });
+    }
+  }, [
+    fileSystemObject.id,
+    fileSystemObject.position.x,
+    fileSystemObject.position.y,
+    fileSystemObjectStore.move,
+    desktopRect,
+    desktopRect?.width,
+    desktopRect?.height,
+    taskbarRect,
+    taskbarRect?.height,
+  ]);
+
   return (
     <div
       {...stylex.props(styles.fileSystemObject)}
-      ref={containerRef}
+      ref={selfRef}
       style={{
         left: pxToVh({ px: fileSystemObject.position.x }),
         top: pxToVh({ px: fileSystemObject.position.y }),

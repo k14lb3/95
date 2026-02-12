@@ -183,6 +183,8 @@ export const BaseFileSystemObject = ({
       {...stylex.props(styles.fileSystemObject)}
       ref={selfRef}
       style={{
+        zIndex:
+          dragStoreState.draggedId === fileSystemObject.id ? 99 : undefined,
         left: pxToVh({ px: fileSystemObject.position.x }),
         top: pxToVh({ px: fileSystemObject.position.y }),
       }}

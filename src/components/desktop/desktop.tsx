@@ -48,7 +48,7 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
     parentId: 'desktop',
   });
 
-  const onMouseDown = (): void => {
+  const handleMouseDown = (): void => {
     focusedStoreAction.focus({ focusedId: 'desktop' });
 
     if (highlightedFileSystemObjectId) {
@@ -57,7 +57,7 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
     }
   };
 
-  const onMouseUp = (): void => {
+  const handleMouseUp = (): void => {
     dragStoreAction.drop();
   };
 
@@ -91,8 +91,8 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
     <div
       {...stylex.props(styles.desktop)}
       id={DESKTOP_ID}
-      onMouseDown={onMouseDown}
-      onMouseUp={onMouseUp}
+      onMouseDown={handleMouseDown}
+      onMouseUp={handleMouseUp}
     >
       {shouldShowUI && (
         <>

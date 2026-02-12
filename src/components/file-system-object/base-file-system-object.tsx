@@ -68,7 +68,7 @@ export const BaseFileSystemObject = ({
   fileSystemObject,
   isHighlighted,
   isLastHighlighted,
-  onMouseDown: onMouseDownCallback,
+  onMouseDown,
 }: BaseFileSystemObjectProps): JSX.Element => {
   const fileSystemObjectStore = useFileSystemObjectStoreAction();
   const dragStoreAction = useDragStoreAction();
@@ -80,7 +80,7 @@ export const BaseFileSystemObject = ({
   const selfRef = useRef<HTMLDivElement>(null);
   const grabOffsetRef = useRef({ x: 0, y: 0 });
 
-  const onMouseDown = (mouseEvent: MouseEvent): void => {
+  const handleMouseDown = (mouseEvent: MouseEvent): void => {
     const self = selfRef.current;
     if (self) {
       const selfRect = self.getBoundingClientRect();
@@ -92,7 +92,7 @@ export const BaseFileSystemObject = ({
       dragStoreAction.drag({ draggedId: fileSystemObject.id });
     }
 
-    onMouseDownCallback(mouseEvent);
+    onMouseDown(mouseEvent);
   };
 
   const renderIconImageMask = (): JSX.Element => {
@@ -188,7 +188,7 @@ export const BaseFileSystemObject = ({
         left: pxToVh({ px: fileSystemObject.position.x }),
         top: pxToVh({ px: fileSystemObject.position.y }),
       }}
-      onMouseDown={onMouseDown}
+      onMouseDown={handleMouseDown}
     >
       <div {...stylex.props(styles.icon)}>
         <Image

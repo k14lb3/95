@@ -26,7 +26,7 @@ export const FileSystemObjects = ({
     const isLastHighlighted =
       lastHighlightedFileSystemObjectId === fileSystemObject.id;
 
-    const onMouseDown = (mouseEvent: MouseEvent): void => {
+    const handleMouseDown = (mouseEvent: MouseEvent): void => {
       mouseEvent.stopPropagation();
       setHighlightedFileSystemObjectId(fileSystemObject.id);
       setLastHighlightedFileSystemObjectId(fileSystemObject.id);
@@ -38,7 +38,7 @@ export const FileSystemObjects = ({
         fileSystemObject={fileSystemObject}
         isHighlighted={isHighlighted}
         isLastHighlighted={isLastHighlighted}
-        onMouseDown={onMouseDown}
+        onMouseDown={handleMouseDown}
       />
     );
   });

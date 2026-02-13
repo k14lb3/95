@@ -2,13 +2,7 @@
 
 import { Desktop, Dos, Screen, Splash } from '@components';
 import { useEventListener } from '@hooks';
-import {
-  getEpochMs,
-  getRandomNumber,
-  localStorageRepo,
-  sessionStorageRepo,
-  sleep,
-} from '@lib';
+import { getRandomNumber, sessionStorageRepo, sleep } from '@lib';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
 import type { BootStage } from '@types';

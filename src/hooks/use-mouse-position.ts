@@ -1,4 +1,3 @@
-import { SCREEN_ELEMENT_ID } from '@constants';
 import { useState } from 'react';
 import { useEventListener } from './use-event-listener';
 
@@ -9,16 +8,16 @@ export type MousePosition = {
 
 export const useMousePosition = (): MousePosition => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const screenElement = document.getElementById(SCREEN_ELEMENT_ID);
+  const bodyElement = document.body;
 
   useEventListener({
     eventName: 'mousemove',
     handler: (event) => {
-      if (!screenElement) {
+      if (!bodyElement) {
         return;
       }
 
-      const { left, top } = screenElement.getBoundingClientRect();
+      const { left, top } = bodyElement.getBoundingClientRect();
 
       setMousePosition({
         x: event.pageX - (left + globalThis.pageXOffset),

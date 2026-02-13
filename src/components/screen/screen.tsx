@@ -1,4 +1,3 @@
-import { SCREEN_ELEMENT_ID } from '@constants';
 import { useWindowSize } from '@hooks';
 import * as stylex from '@stylexjs/stylex';
 import { type JSX, type PropsWithChildren, useEffect, useState } from 'react';
@@ -32,8 +31,7 @@ export const Screen = ({ style, children }: Props): JSX.Element => {
   }, [windowSize.width, windowSize.height]);
 
   return (
-    <div
-      id={SCREEN_ELEMENT_ID}
+    <body
       {...stylex.props(
         styles.screen,
         shouldSetScreenAspectRatio && styles.screenAspectRatio,
@@ -41,6 +39,6 @@ export const Screen = ({ style, children }: Props): JSX.Element => {
       )}
     >
       {children}
-    </div>
+    </body>
   );
 };

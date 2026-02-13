@@ -13,15 +13,12 @@ type Props = PropsWithChildren;
 
 const styles = stylex.create({
   html: {
-    height: '100%',
     fontFamily: font['Microsoft Sans Serif'],
-    backgroundColor: color.black,
-    cursor: cursor.none,
-  },
-  body: {
-    height: 'inherit',
+    height: '100%',
     display: 'flex',
     justifyContent: 'center',
+    backgroundColor: color.black,
+    cursor: cursor.none,
   },
 });
 
@@ -29,15 +26,14 @@ export default ({ children }: Props): JSX.Element => {
   const dragStoreAction = useDragStoreAction();
 
   return (
-    <html lang='en' {...stylex.props(styles.html)}>
-      <body
-        onMouseUp={() => {
-          dragStoreAction.drop();
-        }}
-        {...stylex.props(styles.body)}
-      >
-        {children}
-      </body>
+    <html
+      lang='en'
+      {...stylex.props(styles.html)}
+      onMouseUp={() => {
+        dragStoreAction.drop();
+      }}
+    >
+      {children}
     </html>
   );
 };

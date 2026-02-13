@@ -1,7 +1,5 @@
-import { localStorageRepo } from '@lib';
 import type { FileSystemObject, Position } from '@types';
 import { create } from 'zustand';
-import { createJSONStorage, persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
 
 export type FileSystemObjectStore = {
@@ -20,66 +18,53 @@ export type FileSystemObjectStore = {
 };
 
 const store = create<FileSystemObjectStore>()(
-  persist(
-    immer((set) => {
-      return {
-        state: {
-          fileSystemObjects: [],
-        },
-        action: {
-          set: ({ fileSystemObjects }) => {
-            return set((store) => {
-              store.state.fileSystemObjects = fileSystemObjects;
-            });
-          },
-          add: ({ fileSystemObject }) => {
-            set((store) => {
-              store.state.fileSystemObjects.push(fileSystemObject);
-            });
-          },
-          remove: ({ fileSystemObjectId }) => {
-            set((store) => {
-              store.state.fileSystemObjects.filter((fileSystemObject) => {
-                return fileSystemObject.id !== fileSystemObjectId;
-              });
-            });
-          },
-          move: ({ fileSystemObjectId, position }) => {
-            return set(({ state }) => {
-              const fileSystemObject = state.fileSystemObjects.find(
-                (fileSystemObject) => {
-                  return fileSystemObject.id === fileSystemObjectId;
-                },
-              );
-
-              if (!fileSystemObject) {
-                return;
-              }
-
-              if (position.x !== undefined) {
-                fileSystemObject.position.x = position.x;
-              }
-
-              if (position.y !== undefined) {
-                fileSystemObject.position.y = position.y;
-              }
-            });
-          },
-        },
-      };
-    }),
-    {
-      name: localStorageRepo.fileSystemObjects.getKey(),
-      storage: createJSONStorage(() => {
-        return globalThis.localStorage;
-      }),
-      partialize: (store) => {
-        return {
-          state: store.state,
-        };
+  immer((set) => {
+    return {
+      state: {
+        fileSystemObjects: [],
       },
-    },
-  ),
+      action: {
+        set: ({ fileSystemObjects }) => {
+          return set((store) => {
+            store.state.fileSystemObjects = fileSystemObjects;
+          });
+        },
+        add: ({ fileSystemObject }) => {
+          set((store) => {
+            store.state.fileSystemObjects.push(fileSystemObject);
+          });
+        },
+        remove: ({ fileSystemObjectId }) => {
+          set((store) => {
+            store.state.fileSystemObjects.filter((fileSystemObject) => {
+              return fileSystemObject.id !== fileSystemObjectId;
+            });
+          });
+        },
+        move: ({ fileSystemObjectId, position }) => {
+          return set(({ state }) => {
+            const fileSystemObject = state.fileSystemObjects.find(
+              (fileSystemObject) => {
+                return fileSystemObject.id === fileSystemObjectId;
+              },
+            );
+
+            if (!fileSystemObject) {
+              return;
+            }
+
+            if (position.x !== undefined) {
+              fileSystemObject.position.x = position.x;
+            }
+
+            if (position.y !== undefined) {
+              fileSystemObject.position.y = position.y;
+            }
+          });
+        },
+      },
+    };
+  }),
 );
 
 export const useFileSystemObjectStoreState =

@@ -1,8 +1,15 @@
 'use client';
 
-import { useDragStoreAction } from '@stores';
 import '@styles';
 
+import { LocalStorageSyncer } from '@components';
+import { DEFAULTS } from '@constants';
+import { localStorageRepo } from '@lib';
+import {
+  useDragStoreAction,
+  useFileSystemObjectStoreAction,
+  useFileSystemObjectStoreState,
+} from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import { font } from '@stylex/font.stylex.ts';
@@ -23,6 +30,8 @@ const styles = stylex.create({
 });
 
 export default ({ children }: Props): JSX.Element => {
+  const fileSystemObjectStoreState = useFileSystemObjectStoreState();
+  const fileSystemObjectStoreAction = useFileSystemObjectStoreAction();
   const dragStoreAction = useDragStoreAction();
 
   return (
@@ -33,6 +42,14 @@ export default ({ children }: Props): JSX.Element => {
         dragStoreAction.drop();
       }}
     >
+      <LocalStorageSyncer
+        value={fileSystemObjectStoreState.fileSystemObjects}
+        defaultValue={DEFAULTS.FILE_SYSTEM_OBJECTS}
+        setter={({ value }) => {
+          fileSystemObjectStoreAction.set({ fileSystemObjects: value });
+        }}
+        repo={localStorageRepo.fileSystemObjects}
+      />
       {children}
     </html>
   );

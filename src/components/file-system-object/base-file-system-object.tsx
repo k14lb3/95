@@ -188,9 +188,8 @@ export const BaseFileSystemObject = ({
         left: pxToVh({ px: fileSystemObject.position.x }),
         top: pxToVh({ px: fileSystemObject.position.y }),
       }}
-      onMouseDown={handleMouseDown}
     >
-      <div {...stylex.props(styles.icon)}>
+      <div {...stylex.props(styles.icon)} onMouseDown={handleMouseDown}>
         <Image
           src={fileSystemObject.iconSrc}
           alt={fileSystemObject.label}
@@ -204,6 +203,7 @@ export const BaseFileSystemObject = ({
           isHighlighted && styles.labelHighlighted,
           isLastHighlighted && styles.labelLastHighlighted,
         )}
+        onMouseDown={handleMouseDown}
       >
         {fileSystemObject.label}
       </div>

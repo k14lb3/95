@@ -79,14 +79,14 @@ export const Desktop = (): JSX.Element => {
     }
 
     return () => {
-      cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
       clearTimeout(timeoutId);
     };
-  }, [cursorStyleStoreAction.set]);
+  }, []);
 
   useEffect(() => {
     sessionStorageRepo.isBooted.set(true);
-  }, []);
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
+  }, [cursorStyleStoreAction.set]);
 
   return (
     <div

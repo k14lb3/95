@@ -53,6 +53,7 @@ const styles = stylex.create({
     borderStyle: 'dotted',
     borderColor: color.transparent,
     fontSize: px[12],
+    whiteSpace: 'nowrap',
   },
   labelHighlighted: {
     borderColor: color.yellow,

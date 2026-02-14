@@ -1,18 +1,18 @@
-import { useWindowSize } from '@hooks';
+import { useWindowSizeStoreState } from '@stores';
 import Image from 'next/image';
 import { type JSX, useEffect, useState } from 'react';
 
 export const Splash = (): JSX.Element => {
-  const windowSize = useWindowSize();
+  const windowSizeStoreState = useWindowSizeStoreState();
   const [objectFit, setObjectFit] = useState<'cover' | 'contain'>('cover');
 
   useEffect(() => {
-    if (windowSize.width / windowSize.height >= 1.333) {
+    if (windowSizeStoreState.width / windowSizeStoreState.height >= 1.333) {
       setObjectFit('contain');
     } else {
       setObjectFit('cover');
     }
-  }, [windowSize.width, windowSize.height]);
+  }, [windowSizeStoreState.width, windowSizeStoreState.height]);
 
   return (
     <Image

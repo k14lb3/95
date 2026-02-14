@@ -1,14 +1,34 @@
 'use client';
 
-import { Desktop, Dos, Screen, Splash } from '@components';
+import {
+  Desktop,
+  DosLoading,
+  DosPrompt,
+  DosStarting,
+  Splash,
+} from '@components';
 import { useEventListener } from '@hooks';
-import { getRandomNumber, sessionStorageRepo, sleep } from '@lib';
+import { getRandomNumber, sleep } from '@lib';
+import {
+  useBootStageStoreAction,
+  useBootStageStoreState,
+  useCursorStyleStoreAction,
+  useCursorStyleStoreState,
+  useWindowSizeStoreState,
+} from '@stores';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import type { BootStage } from '@types';
 import { type JSX, useEffect, useEffectEvent, useState } from 'react';
 
 const styles = stylex.create({
+  body: {
+    width: '100%',
+    height: 'inherit',
+  },
+  bodyAspectRatio: {
+    width: null,
+    aspectRatio: '4/3',
+  },
   cursorNone: {
     cursor: cursor.none,
   },
@@ -24,131 +44,95 @@ const styles = stylex.create({
 });
 
 export default (): JSX.Element => {
-  const [cursorStyle, setCursorStyle] = useState<
-    | typeof styles.cursorNone
-    | typeof styles.cursorDefault
-    | typeof styles.cursorProgress
-    | typeof styles.cursorWait
-  >(styles.cursorNone);
-  const [bootStage, setBootStage] = useState<BootStage>('dos-loading');
+  const windowSizeStore = useWindowSizeStoreState();
+  const bootStageStoreState = useBootStageStoreState();
+  const bootStageStoreAction = useBootStageStoreAction();
+  const cursorStyleStoreState = useCursorStyleStoreState();
+  const cursorStyleStoreAction = useCursorStyleStoreAction();
+
+  const [shouldSetBodyAspectRatio, setShouldSetBodyAspectRatio] =
+    useState<boolean>(false);
 
   const startBootSequence = useEffectEvent(async () => {
-    if (bootStage !== 'dos-prompt') {
+    if (bootStageStoreState.bootStage !== 'dos-prompt') {
       return;
     }
 
-    setBootStage('dos-loading');
+    bootStageStoreAction.set({ bootStage: 'dos-loading' });
     await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
 
-    setBootStage('dos-starting');
+    bootStageStoreAction.set({ bootStage: 'dos-starting' });
     await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
 
-    setBootStage('dos-loading');
+    bootStageStoreAction.set({ bootStage: 'dos-loading' });
     await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
 
-    setBootStage('splash');
+    bootStageStoreAction.set({ bootStage: 'splash' });
+    const audio = new Audio('/audio/splash.mp3');
+    audio.play();
     await sleep({ ms: 7000 });
 
-    setBootStage('initializing');
-    setCursorStyle(styles.cursorDefault);
+    bootStageStoreAction.set({ bootStage: 'initializing' });
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
     await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
 
-    setCursorStyle(styles.cursorProgress);
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorProgress });
     await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
 
-    setCursorStyle(styles.cursorDefault);
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
     await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
 
-    setCursorStyle(styles.cursorWait);
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorWait });
     await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
 
-    setCursorStyle(styles.cursorDefault);
-    setBootStage('booted');
-    setCursorStyle(styles.cursorWait);
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
+    bootStageStoreAction.set({ bootStage: 'booted' });
+    cursorStyleStoreAction.set({ cursorStyle: styles.cursorWait });
   });
 
   useEffect(() => {
-    const timeoutId = setTimeout(
-      () => {
-        setBootStage('dos-prompt');
-      },
-      getRandomNumber({ min: 0, max: 500 }),
+    setShouldSetBodyAspectRatio(
+      windowSizeStore.width / windowSizeStore.height >= 1.333,
     );
+  }, [windowSizeStore.width, windowSizeStore.height]);
 
-    const isBooted = sessionStorageRepo.isBooted.get();
-
-    if (isBooted) {
-      setBootStage('booted');
-      setCursorStyle(styles.cursorDefault);
-      clearTimeout(timeoutId);
-    }
-
-    return () => {
-      clearTimeout(timeoutId);
-    };
-  }, []);
-
-  useEventListener({ eventName: 'keydown', handler: startBootSequence });
   useEventListener({
     eventName: 'keydown',
     handler: startBootSequence,
-    options: { passive: true },
+  });
+
+  useEventListener({
+    eventName: 'keydown',
+    handler: startBootSequence,
+    options: {
+      passive: true,
+    },
   });
 
   return (
-    <Screen style={cursorStyle}>
+    <body
+      {...stylex.props(
+        styles.body,
+        shouldSetBodyAspectRatio && styles.bodyAspectRatio,
+        cursorStyleStoreState.cursorStyle,
+      )}
+    >
       {(() => {
-        switch (bootStage) {
+        switch (bootStageStoreState.bootStage) {
           case 'dos-loading':
-            return (
-              <Dos>
-                <Dos.Text>
-                  <Dos.Cursor />
-                </Dos.Text>
-              </Dos>
-            );
+            return <DosLoading />;
           case 'dos-prompt':
-            return (
-              <Dos>
-                <Dos.Text>
-                  [Press any key to boot]
-                  <Dos.Cursor />
-                </Dos.Text>
-              </Dos>
-            );
+            return <DosPrompt />;
           case 'dos-starting':
-            return (
-              <Dos>
-                <Dos.Text>Starting 95...</Dos.Text>
-                <Dos.Text>&nbsp;</Dos.Text>
-                <Dos.Text>&nbsp;</Dos.Text>
-                <Dos.Text>
-                  <Dos.Cursor />
-                </Dos.Text>
-              </Dos>
-            );
+            return <DosStarting />;
           case 'splash':
-            return (
-              <>
-                <audio src='/audio/splash.mp3' autoPlay={true}>
-                  <track kind='captions' />
-                </audio>
-                <Splash />
-              </>
-            );
+            return <Splash />;
           case 'initializing':
-            return;
+            return null;
           case 'booted':
-            return (
-              <Desktop
-                onShowUI={() => {
-                  sessionStorageRepo.isBooted.set(true);
-                  setCursorStyle(styles.cursorDefault);
-                }}
-              />
-            );
+            return <Desktop />;
         }
       })()}
-    </Screen>
+    </body>
   );
 };

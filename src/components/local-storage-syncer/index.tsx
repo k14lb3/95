@@ -1,1 +1,1 @@
-export * from './local-storage-syncer';
+export * from './file-system-objects-local-storage-syncer';

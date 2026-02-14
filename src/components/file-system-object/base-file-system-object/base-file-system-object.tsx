@@ -1,4 +1,4 @@
-import { useDesktopRect, useMousePosition } from '@hooks';
+import { useDesktopRect, useMousePosition, useTaskbarRect } from '@hooks';
 import { pxToVh, viewportToDesignPx } from '@lib';
 import {
   useDragStoreAction,
@@ -14,7 +14,6 @@ import type {
 } from '@types';
 import Image from 'next/image';
 import { type JSX, type MouseEvent, useEffect, useRef } from 'react';
-import { useTaskbarRect } from '../../hooks/use-taskbar-rect';
 
 export type BaseFileSystemObjectProps = {
   fileSystemObject: FileSystemObjectType;
@@ -95,18 +94,6 @@ export const BaseFileSystemObject = ({
     onMouseDown(mouseEvent);
   };
 
-  const renderIconImageMask = (): JSX.Element => {
-    return (
-      <div
-        {...stylex.props(styles.iconImageMask)}
-        style={{
-          maskImage: `url(${fileSystemObject.iconSrc})`,
-          WebkitMaskImage: `url(${fileSystemObject.iconSrc})`,
-        }}
-      />
-    );
-  };
-
   useEffect(() => {
     if (dragStoreState.draggedId !== fileSystemObject.id) {
       return;
@@ -133,11 +120,7 @@ export const BaseFileSystemObject = ({
 
   useEffect(() => {
     const self = selfRef.current;
-    if (!self) {
-      return;
-    }
-
-    if (!desktopRect || !taskbarRect) {
+    if (!self || !desktopRect || !taskbarRect) {
       return;
     }
 
@@ -195,7 +178,15 @@ export const BaseFileSystemObject = ({
           alt={fileSystemObject.label}
           fill={true}
         />
-        {isHighlighted && renderIconImageMask()}
+        {isHighlighted && (
+          <div
+            {...stylex.props(styles.iconImageMask)}
+            style={{
+              maskImage: `url(${fileSystemObject.iconSrc})`,
+              WebkitMaskImage: `url(${fileSystemObject.iconSrc})`,
+            }}
+          />
+        )}
       </div>
       <div
         {...stylex.props(

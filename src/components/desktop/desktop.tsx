@@ -6,13 +6,15 @@ import {
   sessionStorageRepo,
 } from '@lib';
 import {
+  useCursorStyleStoreAction,
   useDragStoreAction,
   useFileSystemObjectStoreState,
   useFocusedStoreAction,
 } from '@stores';
 import { color } from '@stylex/color.stylex.ts';
+import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import { type JSX, useEffect, useEffectEvent, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 import { FileSystemObjects } from '../file-system-objects';
 
 const styles = stylex.create({
@@ -24,16 +26,16 @@ const styles = stylex.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
   },
+  cursorDefault: {
+    cursor: cursor.default,
+  },
 });
 
-type Props = {
-  onShowUI: () => void;
-};
-
-export const Desktop = ({ onShowUI }: Props): JSX.Element => {
+export const Desktop = (): JSX.Element => {
   const fileSystemObjectStoreState = useFileSystemObjectStoreState();
   const focusedStoreAction = useFocusedStoreAction();
   const dragStoreAction = useDragStoreAction();
+  const cursorStyleStoreAction = useCursorStyleStoreAction();
 
   const [shouldShowUI, setShouldShowUI] = useState<boolean>(false);
   const [highlightedFileSystemObjectId, setHighlightedFileSystemObjectId] =
@@ -77,14 +79,13 @@ export const Desktop = ({ onShowUI }: Props): JSX.Element => {
     }
 
     return () => {
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
       clearTimeout(timeoutId);
     };
-  }, []);
-
-  const onShowUiEffectEvent = useEffectEvent(onShowUI);
+  }, [cursorStyleStoreAction.set]);
 
   useEffect(() => {
-    onShowUiEffectEvent();
+    sessionStorageRepo.isBooted.set(true);
   }, []);
 
   return (

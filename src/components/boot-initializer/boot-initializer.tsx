@@ -27,7 +27,6 @@ export const BootInitializer = (): null => {
     const isBooted = sessionStorageRepo.isBooted.get();
 
     if (isBooted) {
-      console.log('booted');
       bootStageStoreAction.set({ bootStage: 'booted' });
       cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
       clearTimeout(timeoutId);

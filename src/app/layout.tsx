@@ -12,7 +12,7 @@ import { color } from '@stylex/color.stylex.ts';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import { font } from '@stylex/font.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import { type JSX, type PropsWithChildren } from 'react';
+import type { JSX, PropsWithChildren } from 'react';
 
 type Props = PropsWithChildren;
 

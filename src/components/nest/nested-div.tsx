@@ -7,12 +7,7 @@ type Props = PropsWithChildren<{
   styles?: stylex.StyleXStyles[];
 }>;
 
-export const NestedDiv = ({
-  id,
-  count = 1,
-  styles = [],
-  children,
-}: Props) => {
+export const NestedDiv = ({ id, count = 1, styles = [], children }: Props) => {
   if (count < 1) {
     throw new Error('`count` prop should be greater than 1.');
   }

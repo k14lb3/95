@@ -1,13 +1,6 @@
 'use client';
 
-import {
-  Desktop,
-  DosLoading,
-  DosPrompt,
-  DosStarting,
-  Splash,
-} from '@components';
-import { useEventListener } from '@hooks';
+import { Desktop, Dos, Splash } from '@components';
 import { getRandomNumber, sleep } from '@lib';
 import {
   useBootStageStoreAction,
@@ -18,7 +11,7 @@ import {
 } from '@stores';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import { type JSX, useEffect, useEffectEvent, useState } from 'react';
+import { type JSX, useEffect, useState } from 'react';
 
 const styles = stylex.create({
   body: {
@@ -53,61 +46,44 @@ export default (): JSX.Element => {
   const [shouldSetBodyAspectRatio, setShouldSetBodyAspectRatio] =
     useState<boolean>(false);
 
-  const startBootSequence = useEffectEvent(async () => {
-    if (bootStageStoreState.bootStage !== 'dos-prompt') {
-      return;
-    }
-
-    bootStageStoreAction.set({ bootStage: 'dos-loading' });
-    await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
-
-    bootStageStoreAction.set({ bootStage: 'dos-starting' });
-    await sleep({ ms: getRandomNumber({ min: 500, max: 1000 }) });
-
-    bootStageStoreAction.set({ bootStage: 'dos-loading' });
-    await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });
-
-    bootStageStoreAction.set({ bootStage: 'splash' });
-    const audio = new Audio('/audio/splash.mp3');
-    audio.play();
-    await sleep({ ms: 7000 });
-
-    bootStageStoreAction.set({ bootStage: 'initializing' });
-    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
-    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-    cursorStyleStoreAction.set({ cursorStyle: styles.cursorProgress });
-    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
-    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-    cursorStyleStoreAction.set({ cursorStyle: styles.cursorWait });
-    await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
-
-    cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
-    bootStageStoreAction.set({ bootStage: 'booted' });
-    cursorStyleStoreAction.set({ cursorStyle: styles.cursorWait });
-  });
-
   useEffect(() => {
     setShouldSetBodyAspectRatio(
       windowSizeStore.width / windowSizeStore.height >= 1.333,
     );
   }, [windowSizeStore.width, windowSizeStore.height]);
 
-  useEventListener({
-    eventName: 'keydown',
-    handler: startBootSequence,
-  });
+  useEffect(() => {
+    (async () => {
+      if (bootStageStoreState.bootStage !== 'splash') {
+        return;
+      }
 
-  useEventListener({
-    eventName: 'keydown',
-    handler: startBootSequence,
-    options: {
-      passive: true,
-    },
-  });
+      const audio = new Audio('/audio/splash.mp3');
+      audio.play();
+      await sleep({ ms: 7000 });
+
+      bootStageStoreAction.set({ bootStage: 'initializing' });
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorProgress });
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorWait });
+      await sleep({ ms: getRandomNumber({ min: 200, max: 500 }) });
+
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorDefault });
+      bootStageStoreAction.set({ bootStage: 'booted' });
+      cursorStyleStoreAction.set({ cursorStyle: styles.cursorWait });
+    })();
+  }, [
+    bootStageStoreAction.set,
+    cursorStyleStoreAction.set,
+    bootStageStoreState.bootStage,
+  ]);
 
   return (
     <body
@@ -119,18 +95,18 @@ export default (): JSX.Element => {
     >
       {(() => {
         switch (bootStageStoreState.bootStage) {
-          case 'dos-loading':
-            return <DosLoading />;
           case 'dos-prompt':
-            return <DosPrompt />;
+          case 'dos-loading':
           case 'dos-starting':
-            return <DosStarting />;
+            return <Dos />;
           case 'splash':
             return <Splash />;
           case 'initializing':
             return null;
           case 'booted':
             return <Desktop />;
+          default:
+            return null;
         }
       })()}
     </body>

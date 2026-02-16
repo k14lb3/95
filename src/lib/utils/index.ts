@@ -2,7 +2,6 @@ export * from './generate-id';
 export * from './get-random-number';
 export * from './get-today-epoch-ms';
 export * from './get-viewport-to-design-scale';
-export * from './omit-undefined';
 export * from './open-url-in-new-tab';
 export * from './pxToVh';
 export * from './safe-parse';

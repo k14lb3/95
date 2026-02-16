@@ -7,10 +7,7 @@ import {
 
 type Props = {
   folder: FolderType;
-} & Pick<
-  BaseFileSystemObjectProps,
-  'isHighlighted' | 'isLastHighlighted' | 'showIndicators' | 'onMouseDown'
->;
+} & Omit<BaseFileSystemObjectProps, 'fileSystemObject'>;
 
 export const Folder = ({
   folder,
@@ -18,6 +15,7 @@ export const Folder = ({
   isLastHighlighted,
   showIndicators,
   onMouseDown,
+  onMouseUp,
 }: Props): JSX.Element => {
   return (
     <BaseFileSystemObject
@@ -26,6 +24,7 @@ export const Folder = ({
       isLastHighlighted={isLastHighlighted}
       showIndicators={showIndicators}
       onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
     />
   );
 };

@@ -7,10 +7,7 @@ import {
 
 type Props = {
   recycleBin: RecycleBinType;
-} & Pick<
-  BaseFileSystemObjectProps,
-  'isHighlighted' | 'isLastHighlighted' | 'showIndicators' | 'onMouseDown'
->;
+} & Omit<BaseFileSystemObjectProps, 'fileSystemObject'>;
 
 export const RecycleBin = ({
   recycleBin,
@@ -18,6 +15,7 @@ export const RecycleBin = ({
   isLastHighlighted,
   showIndicators,
   onMouseDown,
+  onMouseUp,
 }: Props): JSX.Element => {
   return (
     <BaseFileSystemObject
@@ -26,6 +24,7 @@ export const RecycleBin = ({
       isLastHighlighted={isLastHighlighted}
       showIndicators={showIndicators}
       onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
     />
   );
 };

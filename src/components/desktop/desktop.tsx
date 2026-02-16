@@ -70,6 +70,12 @@ export const Desktop = (): JSX.Element => {
     dragStoreAction.drop();
   };
 
+  const handleFileSystemObjectsMouseUp = (): void => {
+    if (focusedStoreState.focusedId !== 'desktop') {
+      focusedStoreAction.focus({ focusedId: 'desktop' });
+    }
+  };
+
   useEffect(() => {
     const timeoutId = setTimeout(
       () => {
@@ -115,6 +121,7 @@ export const Desktop = (): JSX.Element => {
             setLastHighlightedFileSystemObjectId={
               setLastHighlightedFileSystemObjectId
             }
+            onMouseUp={handleFileSystemObjectsMouseUp}
           />
           <Taskbar />
         </>

@@ -13,6 +13,7 @@ type Props = {
   setLastHighlightedFileSystemObjectId: (
     highlightedFileSystemObjectId: string | null,
   ) => void;
+  onMouseUp: (mouseEvent: MouseEvent) => void;
 };
 
 export const FileSystemObjects = ({
@@ -22,6 +23,7 @@ export const FileSystemObjects = ({
   setHighlightedFileSystemObjectId,
   lastHighlightedFileSystemObjectId,
   setLastHighlightedFileSystemObjectId,
+  onMouseUp,
 }: Props): JSX.Element[] => {
   return fileSystemObjects.map((fileSystemObject) => {
     const isHighlighted = highlightedFileSystemObjectId === fileSystemObject.id;
@@ -42,6 +44,7 @@ export const FileSystemObjects = ({
         isHighlighted={isHighlighted}
         isLastHighlighted={isLastHighlighted}
         onMouseDown={handleMouseDown}
+        onMouseUp={onMouseUp}
       />
     );
   });

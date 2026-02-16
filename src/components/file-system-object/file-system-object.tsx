@@ -10,6 +10,7 @@ export type FileSystemObjectProps = {
   isHighlighted: boolean;
   isLastHighlighted: boolean;
   onMouseDown: (mouseEvent: MouseEvent) => void;
+  onMouseUp: (mouseEvent: MouseEvent) => void;
 };
 
 export const FileSystemObject = ({
@@ -18,6 +19,7 @@ export const FileSystemObject = ({
   isHighlighted,
   isLastHighlighted,
   onMouseDown,
+  onMouseUp,
 }: FileSystemObjectProps): JSX.Element | null => {
   switch (fileSystemObject.type) {
     case 'link':
@@ -28,6 +30,7 @@ export const FileSystemObject = ({
           isHighlighted={isHighlighted}
           isLastHighlighted={isLastHighlighted}
           onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
         />
       );
     case 'folder':
@@ -38,6 +41,7 @@ export const FileSystemObject = ({
           isHighlighted={isHighlighted}
           isLastHighlighted={isLastHighlighted}
           onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
         />
       );
     case 'recycle-bin':
@@ -48,6 +52,7 @@ export const FileSystemObject = ({
           isLastHighlighted={isLastHighlighted}
           isHighlighted={isHighlighted}
           onMouseDown={onMouseDown}
+          onMouseUp={onMouseUp}
         />
       );
     default:

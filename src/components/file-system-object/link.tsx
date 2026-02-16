@@ -8,10 +8,7 @@ import {
 
 type Props = {
   link: LinkType;
-} & Pick<
-  BaseFileSystemObjectProps,
-  'isHighlighted' | 'isLastHighlighted' | 'showIndicators' | 'onMouseDown'
->;
+} & Omit<BaseFileSystemObjectProps, 'fileSystemObject'>;
 
 export const Link = ({
   link,
@@ -19,6 +16,7 @@ export const Link = ({
   isLastHighlighted,
   showIndicators,
   onMouseDown,
+  onMouseUp,
 }: Props): JSX.Element => {
   const handleDoubleClick = (): void => {
     console.log('opening');
@@ -32,6 +30,7 @@ export const Link = ({
       isLastHighlighted={isLastHighlighted}
       showIndicators={showIndicators}
       onMouseDown={onMouseDown}
+      onMouseUp={onMouseUp}
       onDoubleClick={handleDoubleClick}
     />
   );

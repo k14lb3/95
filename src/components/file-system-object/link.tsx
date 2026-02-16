@@ -1,3 +1,4 @@
+import { openUrlInNewTab } from '@lib';
 import type { Link as LinkType } from '@types';
 import type { JSX } from 'react';
 import {
@@ -18,12 +19,18 @@ export const Link = ({
   isLastHighlighted,
   onMouseDown,
 }: Props): JSX.Element => {
+  const handleDoubleClick = (): void => {
+    console.log('opening');
+    openUrlInNewTab(link);
+  };
+
   return (
     <BaseFileSystemObject
       fileSystemObject={link}
       isHighlighted={isHighlighted}
       isLastHighlighted={isLastHighlighted}
       onMouseDown={onMouseDown}
+      onDoubleClick={handleDoubleClick}
     />
   );
 };

@@ -19,7 +19,8 @@ export type BaseFileSystemObjectProps = {
   fileSystemObject: FileSystemObjectType;
   isHighlighted: boolean;
   isLastHighlighted: boolean;
-  onMouseDown: (mouseEvent: MouseEvent) => void;
+  onMouseDown?: (mouseEvent: MouseEvent) => void;
+  onDoubleClick?: (mouseEvent: MouseEvent) => void;
 };
 
 const styles = stylex.create({
@@ -69,6 +70,7 @@ export const BaseFileSystemObject = ({
   isHighlighted,
   isLastHighlighted,
   onMouseDown,
+  onDoubleClick,
 }: BaseFileSystemObjectProps): JSX.Element => {
   const fileSystemObjectStore = useFileSystemObjectStoreAction();
   const dragStoreAction = useDragStoreAction();
@@ -92,7 +94,11 @@ export const BaseFileSystemObject = ({
       dragStoreAction.drag({ draggedId: fileSystemObject.id });
     }
 
-    onMouseDown(mouseEvent);
+    onMouseDown?.(mouseEvent);
+  };
+
+  const handleDoubleClick = (mouseEvent: MouseEvent): void => {
+    onDoubleClick?.(mouseEvent);
   };
 
   useEffect(() => {
@@ -173,7 +179,11 @@ export const BaseFileSystemObject = ({
         top: pxToVh({ px: fileSystemObject.position.y }),
       }}
     >
-      <div {...stylex.props(styles.icon)} onMouseDown={handleMouseDown}>
+      <div
+        {...stylex.props(styles.icon)}
+        onMouseDown={handleMouseDown}
+        onDoubleClick={handleDoubleClick}
+      >
         <Image
           src={fileSystemObject.iconSrc}
           alt={fileSystemObject.label}

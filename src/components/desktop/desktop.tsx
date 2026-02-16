@@ -54,11 +54,6 @@ export const Desktop = (): JSX.Element => {
 
   const shouldShowIndicators = focusedStoreState.focusedId === 'desktop';
 
-  console.log({
-    focusedId: focusedStoreState.focusedId,
-    shouldShowIndicators,
-  });
-
   const handleMouseDown = (): void => {
     if (focusedStoreState.focusedId !== 'desktop') {
       focusedStoreAction.focus({ focusedId: 'desktop' });

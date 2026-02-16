@@ -41,13 +41,15 @@ const styles = stylex.create({
   },
   iconImageMask: {
     position: 'absolute',
-    opacity: '70%',
     inset: 0,
-    backgroundColor: color.blue,
     maskRepeat: 'no-repeat',
     WebkitMaskRepeat: 'no-repeat',
     maskSize: px[32],
     WebkitMaskSize: px[32],
+    backgroundImage: `
+      repeating-linear-gradient(45deg, ${color.blue} 0%, ${color.blue} 25%, ${color.transparent} 25%, ${color.transparent} 50%)
+    `,
+    backgroundSize: '0.2vh 0.2vh',
   },
   label: {
     padding: px[1],

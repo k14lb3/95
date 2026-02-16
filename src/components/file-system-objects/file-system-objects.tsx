@@ -1,8 +1,9 @@
 import type { FileSystemObject as FileSystemObjectType } from '@types';
 import type { JSX, MouseEvent } from 'react';
-import { FileSystemObject } from '../file-system-object';
+import { FileSystemObject } from '../file-system-object/file-system-object';
 
 type Props = {
+  showIndicators: boolean;
   fileSystemObjects: FileSystemObjectType[];
   highlightedFileSystemObjectId: string | null;
   setHighlightedFileSystemObjectId: (
@@ -15,6 +16,7 @@ type Props = {
 };
 
 export const FileSystemObjects = ({
+  showIndicators,
   fileSystemObjects,
   highlightedFileSystemObjectId,
   setHighlightedFileSystemObjectId,
@@ -34,6 +36,7 @@ export const FileSystemObjects = ({
 
     return (
       <FileSystemObject
+        showIndicators={showIndicators}
         key={fileSystemObject.id}
         fileSystemObject={fileSystemObject}
         isHighlighted={isHighlighted}

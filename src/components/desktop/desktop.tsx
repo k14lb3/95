@@ -10,6 +10,7 @@ import {
   useDragStoreAction,
   useFileSystemObjectStoreState,
   useFocusedStoreAction,
+  useFocusedStoreState,
 } from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import { cursor } from '@stylex/cursor.stylex.ts';
@@ -33,6 +34,7 @@ const styles = stylex.create({
 
 export const Desktop = (): JSX.Element => {
   const fileSystemObjectStoreState = useFileSystemObjectStoreState();
+  const focusedStoreState = useFocusedStoreState();
   const focusedStoreAction = useFocusedStoreAction();
   const dragStoreAction = useDragStoreAction();
   const cursorStyleStoreAction = useCursorStyleStoreAction();
@@ -50,8 +52,18 @@ export const Desktop = (): JSX.Element => {
     parentId: 'desktop',
   });
 
+  const shouldShowIndicators = focusedStoreState.focusedId === 'desktop';
+
+  console.log({
+    focusedId: focusedStoreState.focusedId,
+    shouldShowIndicators,
+  });
+
   const handleMouseDown = (): void => {
-    focusedStoreAction.focus({ focusedId: 'desktop' });
+    if (focusedStoreState.focusedId !== 'desktop') {
+      focusedStoreAction.focus({ focusedId: 'desktop' });
+      return;
+    }
 
     if (highlightedFileSystemObjectId) {
       setHighlightedFileSystemObjectId(null);
@@ -98,6 +110,7 @@ export const Desktop = (): JSX.Element => {
       {shouldShowUI && (
         <>
           <FileSystemObjects
+            showIndicators={shouldShowIndicators}
             fileSystemObjects={fileSystemObjects}
             highlightedFileSystemObjectId={highlightedFileSystemObjectId}
             setHighlightedFileSystemObjectId={setHighlightedFileSystemObjectId}

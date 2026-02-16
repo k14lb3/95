@@ -1,8 +1,9 @@
 import { TASKBAR_ID } from '@constants';
+import { useFocusedStoreAction } from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import { px } from '@stylex/px.stylex.ts';
 import * as stylex from '@stylexjs/stylex';
-import type { JSX } from 'react';
+import type { JSX, MouseEvent } from 'react';
 import { NestedDiv } from '../nest';
 import { Clock } from './clock';
 import { Start } from './start';
@@ -33,6 +34,13 @@ const styles = stylex.create({
 });
 
 export const Taskbar = (): JSX.Element => {
+  const focusedStoreAction = useFocusedStoreAction();
+
+  const handleMouseDown = (mouseEvent: MouseEvent) => {
+    mouseEvent.stopPropagation();
+    focusedStoreAction.focus({ focusedId: 'taskbar' });
+  };
+
   return (
     <NestedDiv
       id={TASKBAR_ID}
@@ -42,6 +50,7 @@ export const Taskbar = (): JSX.Element => {
         [styles.taskbarInner1],
         [styles.taskbarInner2],
       ]}
+      onMouseDown={handleMouseDown}
     >
       <Start />
       <Clock />

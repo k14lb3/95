@@ -19,6 +19,7 @@ export type BaseFileSystemObjectProps = {
   fileSystemObject: FileSystemObjectType;
   isHighlighted: boolean;
   isLastHighlighted: boolean;
+  showIndicators?: boolean;
   onMouseDown?: (mouseEvent: MouseEvent) => void;
   onDoubleClick?: (mouseEvent: MouseEvent) => void;
 };
@@ -69,6 +70,7 @@ export const BaseFileSystemObject = ({
   fileSystemObject,
   isHighlighted,
   isLastHighlighted,
+  showIndicators = true,
   onMouseDown,
   onDoubleClick,
 }: BaseFileSystemObjectProps): JSX.Element => {
@@ -189,7 +191,7 @@ export const BaseFileSystemObject = ({
           alt={fileSystemObject.label}
           fill={true}
         />
-        {isHighlighted && (
+        {showIndicators && isHighlighted && (
           <div
             {...stylex.props(styles.iconImageMask)}
             style={{
@@ -202,8 +204,8 @@ export const BaseFileSystemObject = ({
       <div
         {...stylex.props(
           styles.label,
-          isHighlighted && styles.labelHighlighted,
-          isLastHighlighted && styles.labelLastHighlighted,
+          showIndicators && isHighlighted && styles.labelHighlighted,
+          showIndicators && isLastHighlighted && styles.labelLastHighlighted,
         )}
         onMouseDown={handleMouseDown}
       >

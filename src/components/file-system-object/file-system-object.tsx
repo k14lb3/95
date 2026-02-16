@@ -5,6 +5,7 @@ import { Link } from './link';
 import { RecycleBin } from './recycle-bin';
 
 export type FileSystemObjectProps = {
+  showIndicators: boolean;
   fileSystemObject: FileSystemObjectType;
   isHighlighted: boolean;
   isLastHighlighted: boolean;
@@ -12,6 +13,7 @@ export type FileSystemObjectProps = {
 };
 
 export const FileSystemObject = ({
+  showIndicators,
   fileSystemObject,
   isHighlighted,
   isLastHighlighted,
@@ -21,6 +23,7 @@ export const FileSystemObject = ({
     case 'link':
       return (
         <Link
+          showIndicators={showIndicators}
           link={fileSystemObject}
           isHighlighted={isHighlighted}
           isLastHighlighted={isLastHighlighted}
@@ -30,6 +33,7 @@ export const FileSystemObject = ({
     case 'folder':
       return (
         <Folder
+          showIndicators={showIndicators}
           folder={fileSystemObject}
           isHighlighted={isHighlighted}
           isLastHighlighted={isLastHighlighted}
@@ -39,6 +43,7 @@ export const FileSystemObject = ({
     case 'recycle-bin':
       return (
         <RecycleBin
+          showIndicators={showIndicators}
           recycleBin={fileSystemObject}
           isLastHighlighted={isLastHighlighted}
           isHighlighted={isHighlighted}

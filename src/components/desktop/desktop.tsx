@@ -52,8 +52,6 @@ export const Desktop = (): JSX.Element => {
     parentId: 'desktop',
   });
 
-  const shouldShowIndicators = focusedStoreState.focusedId === 'desktop';
-
   const handleMouseDown = (): void => {
     if (focusedStoreState.focusedId !== 'desktop') {
       focusedStoreAction.focus({ focusedId: 'desktop' });
@@ -111,7 +109,7 @@ export const Desktop = (): JSX.Element => {
       {shouldShowUI && (
         <>
           <FileSystemObjects
-            showIndicators={shouldShowIndicators}
+            parentId='desktop'
             fileSystemObjects={fileSystemObjects}
             highlightedFileSystemObjectId={highlightedFileSystemObjectId}
             setHighlightedFileSystemObjectId={setHighlightedFileSystemObjectId}

@@ -7,7 +7,6 @@ import {
 } from '@lib';
 import {
   useCursorStyleStoreAction,
-  useDragStoreAction,
   useFileSystemObjectStoreState,
   useFocusedStoreAction,
   useFocusedStoreState,
@@ -37,7 +36,6 @@ export const Desktop = (): JSX.Element => {
   const fileSystemObjectStoreState = useFileSystemObjectStoreState();
   const focusedStoreState = useFocusedStoreState();
   const focusedStoreAction = useFocusedStoreAction();
-  const dragStoreAction = useDragStoreAction();
   const cursorStyleStoreAction = useCursorStyleStoreAction();
 
   const [shouldShowUI, setShouldShowUI] = useState<boolean>(false);
@@ -63,10 +61,6 @@ export const Desktop = (): JSX.Element => {
       setHighlightedFileSystemObjectId(null);
       setLastHighlightedFileSystemObjectId(highlightedFileSystemObjectId);
     }
-  };
-
-  const handleMouseUp = (): void => {
-    dragStoreAction.drop();
   };
 
   const handleFileSystemObjectsMouseUp = (): void => {
@@ -105,7 +99,6 @@ export const Desktop = (): JSX.Element => {
       {...stylex.props(styles.desktop)}
       id={DESKTOP_ID}
       onMouseDown={handleMouseDown}
-      onMouseUp={handleMouseUp}
     >
       {shouldShowUI && (
         <>

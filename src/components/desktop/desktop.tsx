@@ -26,6 +26,7 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    overflow: 'hidden',
   },
   cursorDefault: {
     cursor: cursor.default,

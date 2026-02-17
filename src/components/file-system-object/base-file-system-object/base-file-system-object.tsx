@@ -143,7 +143,6 @@ export const BaseFileSystemObject = ({
     mousePosition.y,
     dragStoreState.draggedId,
     fileSystemObject.id,
-    // fileSystemObjectStoreAction.move,
   ]);
 
   useEffect(() => {

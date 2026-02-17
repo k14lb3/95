@@ -1,3 +1,4 @@
+import { DESKTOP_ID } from '@constants';
 import { useDesktopRect, useMousePosition, useTaskbarRect } from '@hooks';
 import { pxToVh, viewportToDesignPx } from '@lib';
 import {
@@ -13,7 +14,9 @@ import type {
   Position,
 } from '@types';
 import Image from 'next/image';
-import { type JSX, type MouseEvent, useEffect, useRef } from 'react';
+import { type JSX, type MouseEvent, useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
+import { DragGhost } from './drag-ghost';
 
 export type BaseFileSystemObjectProps = {
   fileSystemObject: FileSystemObjectType;
@@ -32,7 +35,6 @@ const styles = stylex.create({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    color: color.white,
   },
   icon: {
     height: px[32],
@@ -57,6 +59,7 @@ const styles = stylex.create({
     borderWidth: px[1],
     borderStyle: 'dotted',
     borderColor: color.transparent,
+    color: color.white,
     fontSize: px[12],
     whiteSpace: 'nowrap',
   },
@@ -78,13 +81,17 @@ export const BaseFileSystemObject = ({
   onMouseUp,
   onDoubleClick,
 }: BaseFileSystemObjectProps): JSX.Element => {
-  const fileSystemObjectStore = useFileSystemObjectStoreAction();
+  const fileSystemObjectStoreAction = useFileSystemObjectStoreAction();
   const dragStoreAction = useDragStoreAction();
   const dragStoreState = useDragStoreState();
 
   const desktopRect = useDesktopRect();
   const taskbarRect = useTaskbarRect();
   const mousePosition = useMousePosition();
+
+  const [dragGhostPosition, setDragGhostPosition] = useState<Position | null>(
+    null,
+  );
   const selfRef = useRef<HTMLDivElement>(null);
   const grabOffsetRef = useRef({ x: 0, y: 0 });
 
@@ -103,7 +110,14 @@ export const BaseFileSystemObject = ({
     onMouseDown?.(mouseEvent);
   };
 
-  const handleMouseUp = (mouseEvent: MouseEvent): void => {
+  const handleDragGhostMouseUp = (mouseEvent: MouseEvent): void => {
+    fileSystemObjectStoreAction.move({
+      fileSystemObjectId: fileSystemObject.id,
+      position: dragGhostPosition ?? {},
+    });
+
+    setDragGhostPosition(null);
+
     onMouseUp?.(mouseEvent);
   };
 
@@ -116,23 +130,20 @@ export const BaseFileSystemObject = ({
       return;
     }
 
-    fileSystemObjectStore.move({
-      fileSystemObjectId: fileSystemObject.id,
-      position: {
-        x: viewportToDesignPx({
-          px: mousePosition.x - grabOffsetRef.current.x,
-        }),
-        y: viewportToDesignPx({
-          px: mousePosition.y - grabOffsetRef.current.y,
-        }),
-      },
+    setDragGhostPosition({
+      x: viewportToDesignPx({
+        px: mousePosition.x - grabOffsetRef.current.x,
+      }),
+      y: viewportToDesignPx({
+        px: mousePosition.y - grabOffsetRef.current.y,
+      }),
     });
   }, [
     mousePosition.x,
     mousePosition.y,
     dragStoreState.draggedId,
     fileSystemObject.id,
-    fileSystemObjectStore,
+    // fileSystemObjectStoreAction.move,
   ]);
 
   useEffect(() => {
@@ -161,7 +172,7 @@ export const BaseFileSystemObject = ({
     }
 
     if (position.x !== undefined || position.y !== undefined) {
-      fileSystemObjectStore.move({
+      fileSystemObjectStoreAction.move({
         fileSystemObjectId: fileSystemObject.id,
         position,
       });
@@ -170,7 +181,7 @@ export const BaseFileSystemObject = ({
     fileSystemObject.id,
     fileSystemObject.position.x,
     fileSystemObject.position.y,
-    fileSystemObjectStore.move,
+    fileSystemObjectStoreAction.move,
     desktopRect,
     desktopRect?.width,
     desktopRect?.height,
@@ -178,21 +189,33 @@ export const BaseFileSystemObject = ({
     taskbarRect?.height,
   ]);
 
+  const desktopElement = document.getElementById(DESKTOP_ID);
+
   return (
     <div
       {...stylex.props(styles.fileSystemObject)}
       ref={selfRef}
       style={{
-        zIndex:
-          dragStoreState.draggedId === fileSystemObject.id ? 99 : undefined,
         left: pxToVh({ px: fileSystemObject.position.x }),
         top: pxToVh({ px: fileSystemObject.position.y }),
       }}
     >
+      {dragGhostPosition &&
+        desktopElement &&
+        createPortal(
+          <DragGhost
+            style={{
+              left: pxToVh({ px: dragGhostPosition.x }),
+              top: pxToVh({ px: dragGhostPosition.y }),
+            }}
+            fileSystemObject={fileSystemObject}
+            onMouseUp={handleDragGhostMouseUp}
+          />,
+          desktopElement,
+        )}
       <div
         {...stylex.props(styles.icon)}
         onMouseDown={handleMouseDown}
-        onMouseUp={handleMouseUp}
         onDoubleClick={handleDoubleClick}
       >
         <Image
@@ -216,7 +239,6 @@ export const BaseFileSystemObject = ({
           showIndicators && isHighlighted && styles.labelHighlighted,
           showIndicators && isLastHighlighted && styles.labelLastHighlighted,
         )}
-        onMouseUp={handleMouseUp}
         onMouseDown={handleMouseDown}
       >
         {fileSystemObject.label}

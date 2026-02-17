@@ -7,6 +7,7 @@ import {
   FileSystemObjectsLocalStorageSyncer,
   WindowSizeSetter,
 } from '@components';
+import { useEventListener } from '@hooks';
 import { useDragStoreAction } from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import { cursor } from '@stylex/cursor.stylex.ts';
@@ -30,12 +31,15 @@ const styles = stylex.create({
 export default ({ children }: Props): JSX.Element => {
   const dragStoreAction = useDragStoreAction();
 
-  const handleMouseUp = (): void => {
-    dragStoreAction.drop();
-  };
+  useEventListener({
+    eventName: 'mouseup',
+    handler: () => {
+      dragStoreAction.drop();
+    },
+  });
 
   return (
-    <html lang='en' {...stylex.props(styles.html)} onMouseUp={handleMouseUp}>
+    <html lang='en' {...stylex.props(styles.html)}>
       <BootInitializer />
       <WindowSizeSetter />
       <FileSystemObjectsLocalStorageSyncer />

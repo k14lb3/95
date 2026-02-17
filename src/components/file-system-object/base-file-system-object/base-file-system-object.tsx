@@ -188,6 +188,12 @@ export const BaseFileSystemObject = ({
     taskbarRect?.height,
   ]);
 
+  useEffect(() => {
+    if (dragStoreState.draggedId !== fileSystemObject.id) {
+      setDragGhostPosition(null);
+    }
+  }, [fileSystemObject.id, dragStoreState.draggedId]);
+
   const desktopElement = document.getElementById(DESKTOP_ID);
 
   return (

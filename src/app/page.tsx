@@ -7,6 +7,7 @@ import {
   useBootStageStoreState,
   useCursorStyleStoreAction,
   useCursorStyleStoreState,
+  useSplashAudioState,
   useWindowSizeStoreState,
 } from '@stores';
 import { cursor } from '@stylex/cursor.stylex.ts';
@@ -37,6 +38,7 @@ const styles = stylex.create({
 });
 
 export default (): JSX.Element => {
+  const splashAudioStoreState = useSplashAudioState();
   const windowSizeStore = useWindowSizeStoreState();
   const bootStageStoreState = useBootStageStoreState();
   const bootStageStoreAction = useBootStageStoreAction();
@@ -58,8 +60,7 @@ export default (): JSX.Element => {
         return;
       }
 
-      const audio = new Audio('/audio/splash.mp3');
-      audio.play();
+      splashAudioStoreState.audio?.play();
       await sleep({ ms: 7000 });
 
       bootStageStoreAction.set({ bootStage: 'initializing' });
@@ -83,6 +84,7 @@ export default (): JSX.Element => {
     bootStageStoreAction.set,
     cursorStyleStoreAction.set,
     bootStageStoreState.bootStage,
+    splashAudioStoreState.audio,
   ]);
 
   return (

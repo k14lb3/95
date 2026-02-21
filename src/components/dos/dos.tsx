@@ -1,6 +1,10 @@
 import { useEventListener } from '@hooks';
 import { getRandomNumber, sleep } from '@lib';
-import { useBootStageStoreAction, useBootStageStoreState } from '@stores';
+import {
+  useBootStageStoreAction,
+  useBootStageStoreState,
+  useSplashAudioAction,
+} from '@stores';
 import { color } from '@stylex/color.stylex.ts';
 import { cursor } from '@stylex/cursor.stylex.ts';
 import { px } from '@stylex/px.stylex.ts';
@@ -34,11 +38,14 @@ const styles = stylex.create({
 export const Dos = (): JSX.Element => {
   const bootStageStoreState = useBootStageStoreState();
   const bootStageStoreAction = useBootStageStoreAction();
+  const splashAudioStoreAction = useSplashAudioAction();
 
   const startBootSequence = useEffectEvent(async () => {
     if (bootStageStoreState.bootStage !== 'dos-prompt') {
       return;
     }
+
+    splashAudioStoreAction.set({ audio: new Audio('/audio/splash.mp3') });
 
     bootStageStoreAction.set({ bootStage: 'dos-loading' });
     await sleep({ ms: getRandomNumber({ min: 500, max: 2000 }) });

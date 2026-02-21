@@ -1,4 +1,4 @@
-import type { PlainObject } from './utils/plain-object';
+import type { PlainObject } from '../utils';
 
 export type StorageValue =
   | string

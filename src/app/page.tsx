@@ -39,7 +39,7 @@ const styles = stylex.create({
 
 export default (): JSX.Element => {
   const splashAudioStoreState = useSplashAudioState();
-  const windowSizeStore = useWindowSizeStoreState();
+  const windowSizeStoreState = useWindowSizeStoreState();
   const bootStageStoreState = useBootStageStoreState();
   const bootStageStoreAction = useBootStageStoreAction();
   const cursorStyleStoreState = useCursorStyleStoreState();
@@ -50,9 +50,9 @@ export default (): JSX.Element => {
 
   useEffect(() => {
     setShouldSetBodyAspectRatio(
-      windowSizeStore.width / windowSizeStore.height >= 1.333,
+      windowSizeStoreState.width / windowSizeStoreState.height >= 1.333,
     );
-  }, [windowSizeStore.width, windowSizeStore.height]);
+  }, [windowSizeStoreState.width, windowSizeStoreState.height]);
 
   useEffect(() => {
     (async () => {

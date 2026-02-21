@@ -17,10 +17,11 @@ export const LocalStorageSyncer = <T extends StorageValue>({
 }: Props<T>): null => {
   // biome-ignore lint/correctness/useExhaustiveDependencies: setter is excluded to prevent re-runs.
   useEffect(() => {
-    let value = repo.get();
-    
-    if (value == null || (Array.isArray(value) && value.length === 0)) {
-      value = defaultValue;
+    let value = defaultValue;
+
+    const stored = repo.get();
+    if (stored != null && !(Array.isArray(stored) && stored.length === 0)) {
+      value = stored;
     }
 
     setter({ value });

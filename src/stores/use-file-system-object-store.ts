@@ -25,7 +25,7 @@ const store = create<FileSystemObjectStore>()(
       },
       action: {
         set: ({ fileSystemObjects }) => {
-          return set((store) => {
+          set((store) => {
             store.state.fileSystemObjects = fileSystemObjects;
           });
         },
@@ -42,7 +42,7 @@ const store = create<FileSystemObjectStore>()(
           });
         },
         move: ({ fileSystemObjectId, position }) => {
-          return set(({ state }) => {
+          set(({ state }) => {
             const fileSystemObject = state.fileSystemObjects.find(
               (fileSystemObject) => {
                 return fileSystemObject.id === fileSystemObjectId;
